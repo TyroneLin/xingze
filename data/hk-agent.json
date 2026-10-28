@@ -10,27 +10,37 @@
   {
    "n": "01",
    "title": "微信咨询",
-   "text": "微信私聊发送心仪商品品牌、官方货号、专柜款式图或愿望清单。"
+   "text": "微信私聊发送心仪商品品牌、官方货号、专柜款式图或愿望清单。",
+   "titleConfirm": true,
+   "_titleNote": "步骤标题待 Leanne 确认"
   },
   {
    "n": "02",
    "title": "核价报价",
-   "text": "按香港专柜当天标价与实时汇率折算，明码约定服务费，拒绝隐形加价。"
+   "text": "按香港专柜当天标价与实时汇率折算，明码约定服务费，拒绝隐形加价。",
+   "titleConfirm": true,
+   "_titleNote": "步骤标题待 Leanne 确认"
   },
   {
    "n": "03",
    "title": "排期确认",
-   "text": "确认款式尺码、色号及采购日期，纳入当周赴港采购清单。"
+   "text": "确认款式尺码、色号及采购日期，纳入当周赴港采购清单。",
+   "titleConfirm": true,
+   "_titleNote": "步骤标题待 Leanne 确认"
   },
   {
    "n": "04",
    "title": "专柜品控",
-   "text": "Leanne 亲临专柜品控，实时图文或连线对桩，封存机打小票与原盒。"
+   "text": "Leanne 亲临专柜品控，实时图文或连线对桩，封存机打小票与原盒。",
+   "titleConfirm": true,
+   "_titleNote": "步骤标题待 Leanne 确认"
   },
   {
    "n": "05",
    "title": "保价寄出",
-   "text": "通关回深后减震加固，顺丰特快足额保价直达。"
+   "text": "通关回深后减震加固，顺丰特快足额保价直达。",
+   "titleConfirm": true,
+   "_titleNote": "步骤标题待 Leanne 确认"
   }
  ],
  "standards": [

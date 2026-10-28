@@ -12,7 +12,7 @@
   finds:function(d){var g=document.querySelector('[data-render=finds]');if(!g)return;g.innerHTML=d.items.map(function(i){return '<article class="post" data-cat="'+e(i.category)+'"><header><span class="avatar" aria-hidden="true">泽</span><div><strong>Leanne @星泽</strong> <span class="tag">主理人</span><p class="meta">'+e(i.location)+' · '+e(i.time)+'</p></div></header><p>'+e(i.text)+'</p><div class="post-im n'+i.images.length+'">'+i.images.map(function(m){return img(m.src,m.alt)}).join('')+'</div>'+tags(i.tags)+'<a class="btn ghost sm" href="#wechat">与 Leanne 聊聊</a></article>'}).join('')},
   'hk-agent':function(d){function set(k,h){var n=document.querySelector('[data-render='+k+']');if(n)n.innerHTML=h}
    set('hk-badges',d.badges.map(function(b){return '<span class="tag">'+e(b)+'</span>'}).join(''));
-   set('hk-steps',d.steps.map(function(s){return '<div class="box step"><span class="num">'+e(s.n)+'</span><h3>'+e(s.title)+'</h3><p>'+e(s.text)+'</p></div>'}).join(''));
+   set('hk-steps',d.steps.map(function(s){return '<div class="box step"><span class="num">'+e(s.n)+'</span><h3><span class="swap" data-swap="hk-step-title" title="文案待 Leanne 确认">'+e(s.title)+'</span></h3><p>'+e(s.text)+'</p></div>'}).join(''));
    set('hk-standards',d.standards.map(function(s){return '<div class="box"><h3>'+e(s.title)+'</h3><p>'+e(s.text)+'</p><span class="meta">'+e(s.tag)+'</span></div>'}).join(''));
    set('hk-faq',d.faq.map(function(f){return '<details><summary>'+e(f.q)+'</summary><p>'+e(f.a)+'</p></details>'}).join(''))}
  };
