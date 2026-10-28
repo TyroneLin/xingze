@@ -38,7 +38,7 @@ SEO = {
     },
     "hk-agent": {
         "title": "香港代购｜星泽 · 港货正品 微信咨询",
-        "desc": "星泽香港代购：流程透明，先沟通后下单。具体服务请微信咨询，本站不在线收款。",
+        "desc": "星泽香港代购：港货正品，流程透明，先沟通后下单。具体服务请微信咨询，本站不在线收款。",
         "path": "/hk-agent/",
     },
     "about": {
@@ -158,7 +158,7 @@ def head(key: str, pre: str) -> str:
   <meta property="og:type" content="website">
   <!-- TODO(deploy): og:url absolute live URL -->
   <meta property="og:url" content="">
-  <!-- TODO(deploy): og:image absolute live URL ending in /share-wide.jpg -->
+  <!-- TODO(deploy): Moments / WeChat share needs ABSOLUTE og:image https://<domain>/share-wide.jpg once COS/custom domain is live — do not invent a fake host. -->
   <meta property="og:image" content="{share}">
   <link rel="icon" href="{fav}" type="image/x-icon">
   <link rel="icon" href="{fav32}" type="image/png" sizes="32x32">
