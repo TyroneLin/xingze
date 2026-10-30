@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>香港代购 · 星泽后台</title>
+<link rel="stylesheet" href="../css/admin.css"/>
+</head>
+<body data-page="hk">
+<div class="shell">
+  <header class="topbar">
+    <a class="back" href="../">← 返回</a>
+    <div class="spacer"></div>
+    <span class="brand">香港代购</span>
+  </header>
+  <main class="main">
+    <div id="scf-notice" class="banner-err" hidden>SCF 未配置 — 可预览；保存需 Function URL。</div>
+    <h1 class="h1">香港代购文案</h1>
+    <p class="lead">整页编辑 · <span class="mono">hk-agent.json</span></p>
+    <div id="errBanner" class="banner-err" hidden></div>
+    <div class="note-box">MVP：徽章 / 流程 / 标准 / FAQ 同页编辑。配图非本屏重点。</div>
+    <div id="form" hidden>
+      <p class="section-title">徽章 badges[]</p>
+      <div class="card">
+        <div class="tag-input" id="badges"><input type="text" placeholder="添加徽章" aria-label="添加徽章"/></div>
+      </div>
+
+      <p class="section-title">流程 steps[]</p>
+      <div class="card" id="steps"></div>
+
+      <p class="section-title">标准 standards[]</p>
+      <div class="card" id="standards"></div>
+
+      <p class="section-title">常见问题 faq[]</p>
+      <div class="card" id="faq"></div>
+
+      <div class="sticky-actions">
+        <a class="btn ghost" href="../">取消</a>
+        <button type="button" class="btn" id="saveBtn">保存整页</button>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="toast ok" id="toastOk" role="status">已保存</div>
+<div class="toast err" id="toastErr" role="alert">保存失败</div>
+<script src="../config.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/hk.js"></script>
+</body>
+</html>

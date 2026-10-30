@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-  <title>星泽 CMS · 登录</title>
-  <link rel="stylesheet" href="css/admin.css">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>内容中心 · 星泽后台</title>
+<link rel="stylesheet" href="css/admin.css"/>
 </head>
-<body data-page="login">
-  <div class="wrap">
-    <p><a class="brand" href="/">星泽</a> <span class="muted sm">内容管理（仅 Leanne）</span></p>
-    <div class="card">
-      <h1 style="font-size:18px;margin:0 0 8px">登录</h1>
-      <p class="muted sm">个人工作室后台 · 不设公开注册</p>
-      <form id="login-form">
-        <label for="password">管理密码</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="由 Tyrone 设置">
-        <div class="row"><button class="btn" type="submit">进入</button></div>
-        <p id="login-err" class="err" role="alert"></p>
-      </form>
-      <p class="muted sm">SCF 未开通前登录会失败，属预期。微信二维码与微信号不在此页配置。</p>
+<body data-page="hub">
+<div class="shell">
+  <header class="topbar">
+    <div>
+      <span class="brand">星泽后台</span>
+      <span class="sub">内容中心</span>
     </div>
-  </div>
-  <script src="config.js"></script>
-  <script src="js/admin.js"></script>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="login/" data-logout>退出</a>
+  </header>
+  <main class="main wide">
+    <div id="scf-notice" class="banner-err" hidden>
+      SCF 未配置 — 列表可读本站数据预览；保存 / 上传需 Tyrone 填入 Function URL。
+    </div>
+    <h1 class="h1">编辑内容</h1>
+    <p class="lead">上传图片 · 改文案 · 保存后写入站点数据并重建静态页</p>
+    <div class="hub-grid">
+      <a class="card hub-card" href="products/">
+        <span class="kicker">PRODUCTS</span>
+        <h2>产品</h2>
+        <p>藏品标题、规格、标签、正文与主图</p>
+        <span class="meta" id="meta-products">products.json</span>
+      </a>
+      <a class="card hub-card" href="finds/">
+        <span class="kicker">FINDS</span>
+        <h2>好物分享</h2>
+        <p>动态文案、地点、标签与多图</p>
+        <span class="meta" id="meta-finds">finds.json</span>
+      </a>
+      <a class="card hub-card" href="hk-agent/">
+        <span class="kicker">HK AGENT</span>
+        <h2>香港代购</h2>
+        <p>徽章、流程、标准与 FAQ</p>
+        <span class="meta">整页 · hk-agent.json</span>
+      </a>
+      <a class="card hub-card" href="origins/">
+        <span class="kicker">ORIGINS</span>
+        <h2>产地标签</h2>
+        <p>o1 / o2 / o3 全局地名（可嵌进规格与标签）</p>
+        <span class="meta">3 项 · products.json → origins</span>
+      </a>
+    </div>
+    <p class="foot-note">不设价格 / 购物车 · 勿填写虚构微信号 · 公众站仍走 bake HTML</p>
+  </main>
+</div>
+<script src="config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/hub.js"></script>
 </body>
 </html>

@@ -54,13 +54,24 @@ cd scf/cms
 python3 -c "from index import main_handler; print(main_handler({'httpMethod':'GET','path':'/health'}, None))"
 ```
 
-## Admin JS status
+## Admin UI (Design pack wired)
 
-- Login / sessionStorage token / products list from `/data/products.json` — scaffolded
-- STS call shape — ready; returns 501 until `CMS_STS_ROLE_ARN`
-- Browser COS PUT — **TODO**: vendor `cos-js-sdk-v5` under `admin/js/vendor/` (no CDN) or small AWS-sign-v4 helper; until then Save shows a clear error after STS
-- finds / hk-agent editors — next slice (same patterns)
-- Design light mock — polish before Leanne handoff
+Routes under `/admin/` (noindex, zh-Hans, jade/ivory):
+
+| Path | Page |
+|------|------|
+| `/admin/login/` | Password gate |
+| `/admin/` | Hub 四入口 |
+| `/admin/products/` | List → `/admin/products/edit.html?id=` |
+| `/admin/finds/` | List → edit |
+| `/admin/hk-agent/` | Whole-page editor |
+| `/admin/origins/` | o1/o2/o3 |
+
+- sessionStorage token; redirect to login if missing
+- login → POST `/login`; save → STS → browser COS PUT (q-sign sha1 in `js/core.js`, no CDN) → POST `/rebuild`
+- `config.js` keeps `scfBase: 'REPLACE_SCF_BASE'` until Function URL
+- MVP: edit existing items only (create/delete stubbed/disabled)
+- Toasts 已保存 / 保存失败; top error banner
 
 ## Rebuild package
 
