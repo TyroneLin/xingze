@@ -1,0 +1,4 @@
+# Tencent SCF (Python 3.9+) — pin lightly; install into package zip for deploy
+cos-python-sdk-v5>=1.9.30
+tencentcloud-sdk-python>=3.0.1000
+# stdlib: hashlib, hmac, json, os, base64, time — no bcrypt binary needed (PBKDF2)
