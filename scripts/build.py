@@ -19,6 +19,11 @@ DIST = ROOT / "dist"
 E = html.escape
 PH = "待 Leanne 素材"
 
+# Temporary preview password gate (client-side). Default ON.
+# Disable: XZ_GATE=0 python3 scripts/build.py  → rebuild + reupload to remove.
+_raw = os.environ.get("XZ_GATE", "1").strip().lower()
+GATE = _raw not in ("0", "false", "off", "no")
+
 # --- Locked v3 SEO (temporary copy until SEO Specialist revises) ---
 SEO = {
     "home": {
@@ -146,11 +151,18 @@ def head(key: str, pre: str) -> str:
         )
     else:
         meta_desc = '\n  <meta name="robots" content="noindex">'
+    html_cls = ' class="xz-locked"' if GATE else ""
+    gate_early = ""
+    if GATE:
+        gate_early = (
+            '\n  <style id="xz-gate-hide">html.xz-locked body>*:not(#xz-gate){visibility:hidden!important}</style>'
+            f'\n  <script src="{pre}js/gate.js"></script>'
+        )
     return f"""<!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-Hans"{html_cls}>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">{gate_early}
   <!-- TODO(deploy): set hreflang + og:url to the live COS / custom-domain absolute URL (e.g. https://www.example.com{s["path"]}). Leave empty until then. -->
   <link rel="alternate" hreflang="zh-Hans" href="">
   <!-- zh-Hant TBD · SEO copy temporary until Specialist revises -->
@@ -293,6 +305,9 @@ def build():
     (DIST / "js").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "css" / "style.css", DIST / "css" / "style.css")
     shutil.copy2(ROOT / "js" / "render.js", DIST / "js" / "render.js")
+    if GATE:
+        shutil.copy2(ROOT / "js" / "gate.js", DIST / "js" / "gate.js")
+        print("gate ON → dist/js/gate.js")
     # data/ optional for CMS later
     shutil.copytree(ROOT / "data", DIST / "data")
     if (ROOT / "images").exists():
@@ -319,10 +334,14 @@ def build():
             print("MISSING asset", name)
 
     robots = ROOT / "robots.txt"
-    if robots.exists():
+    if GATE:
+        # Soft-lock: disallow crawlers while preview gate is on
+        (DIST / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+        print("gate ON → robots Disallow: /")
+    elif robots.exists():
         shutil.copy2(robots, DIST / "robots.txt")
 
-    print("BUILD OK →", DIST)
+    print("BUILD OK →", DIST, "| GATE=", GATE)
 
 
 if __name__ == "__main__":
