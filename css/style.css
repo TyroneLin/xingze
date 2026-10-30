@@ -2,7 +2,7 @@
 :root{--jade:#5B7A6E;--jade-d:#436156;--ivory:#F7F3EA;--card:#fff;--line:#C1C8C3;--soft:#ECEFEA;--ink:#191C1A;--muted:#5F6662;--r:10px;
 --f:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--ivory);color:var(--ink);font:15px/1.7 var(--f);padding-bottom:96px}
+body{margin:0;background:var(--ivory);color:var(--ink);font:15px/1.7 var(--f);padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{line-height:1.3;margin:.2em 0 .4em}h1{font-size:28px}h2{font-size:21px}h3{font-size:16px}p{margin:.4em 0 .8em}
 a{color:var(--jade-d)}.muted{color:var(--muted)}.sm{font-size:13px}.c{text-align:center}
 .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
@@ -176,6 +176,27 @@ section.about-hero > .ph{
   .xz-modal__qr img{width:240px}
 }
 
+
+/* Products list — clear full-width sticky CTA under grid CTAs (mobile) */
+.products-list .grid{padding-bottom:12px}
+.products-list .sticky-clear{
+  height:calc(56px + env(safe-area-inset-bottom,0px));
+  flex:none;
+}
+.products-list main > .sec:has(.grid){padding-bottom:48px}
+/* Short phones: first-row card CTAs sat ~21px under sticky; trim thumb a bit */
+.products-list .card .ph{min-height:96px}
+.products-list .card-b>p:not(.meta){
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+}
+@media(min-width:1024px){
+  .products-list .sticky-clear{height:0}
+  .products-list main > .sec:has(.grid){padding-bottom:44px}
+  .products-list .card .ph{min-height:180px}
+  .products-list .card-b>p:not(.meta){
+    display:block;-webkit-line-clamp:unset;overflow:visible;
+  }
+}
 
 /* === PDP pages (from Design pdp-xz-c01) === */
 .btn.block{display:inline-flex;align-items:center;justify-content:center;width:100%}

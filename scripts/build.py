@@ -409,9 +409,9 @@ def build():
     # --- products ---
     all_cards = "".join(product_card(i, origins, f'{i["id"]}/') for i in pj["items"])
     prod = f"""<section class="wrap phead"><span class="eyebrow">Xingze Curated Collection / 现物鉴赏库</span><h1>产品</h1><p class="lead">深港双城私藏 · 一物一相 · 静待有缘人品鉴</p><p>水晶、文玩与健康好物信息展示。星泽不设购物车，所有展出之器皆由主理人 Leanne 亲采挑验，一物一图；价格请通过微信咨询确认。</p></section>
-<section class="wrap sec">{chips(pj["categories"],"藏品分类")}<div class="grid g-4" data-filter-target="products">{all_cards}</div></section>
+<section class="wrap sec">{chips(pj["categories"],"藏品分类")}<div class="grid g-4" data-filter-target="products">{all_cards}</div><div class="sticky-clear" aria-hidden="true"></div></section>
 <section class="band"><div class="wrap sec">{sh("鉴赏与信任守则","为何坚持私信咨询，而非直接标价付款？","天然物华独一无二，克重、纹理与成色皆需在自然光下细审。")}{trust_html()}</div></section>"""
-    write("products/index.html", shell("products", "../", "products/", prod))
+    write("products/index.html", shell("products", "../", "products/", prod, body_class="products-list"))
 
     # --- product detail pages (PDP) ---
     cats = pj.get("categories", {})
