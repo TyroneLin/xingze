@@ -1,6 +1,7 @@
 /* 星泽 v3 — system fonts only, no external assets */
 :root{--jade:#5B7A6E;--jade-d:#436156;--ivory:#F7F3EA;--card:#fff;--line:#C1C8C3;--soft:#ECEFEA;--ink:#191C1A;--muted:#5F6662;--r:10px;
---f:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+--f:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+--xz-ease:cubic-bezier(0.33,0,0.2,1);--xz-dur-fast:140ms;--xz-dur:240ms;--xz-dur-slow:360ms}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:var(--ivory);color:var(--ink);font:15px/1.7 var(--f);padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{line-height:1.3;margin:.2em 0 .4em}h1{font-size:28px}h2{font-size:21px}h3{font-size:16px}p{margin:.4em 0 .8em}
@@ -128,18 +129,23 @@ section.about-hero > .ph{
 .feed .post:nth-child(5) .post-im .ph:nth-child(2){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-09.jpg")}
 /* end mood dummies — Option A */
 
-/* WeChat consult modal — Designer Option A */
+/* WeChat consult modal — motion: opacity/visibility (no display:none while fading) */
 .xz-modal{
   position:fixed;inset:0;z-index:1100;
   display:flex;align-items:center;justify-content:center;
   padding:16px;
   font-family:var(--f);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity var(--xz-dur-slow) var(--xz-ease),visibility var(--xz-dur-slow) var(--xz-ease);
 }
-.xz-modal:not(.is-open){display:none}
+.xz-modal.is-open{opacity:1;visibility:visible;pointer-events:auto}
 .xz-modal__backdrop{
   position:absolute;inset:0;
   background:rgba(0,0,0,.48);
+  opacity:0;
+  transition:opacity var(--xz-dur-slow) var(--xz-ease);
 }
+.xz-modal.is-open .xz-modal__backdrop{opacity:1}
 .xz-modal__card{
   position:relative;z-index:1;
   width:min(100%,320px);
@@ -150,7 +156,11 @@ section.about-hero > .ph{
   box-shadow:0 12px 40px rgba(0,0,0,.18);
   border-top:3px solid var(--jade);
   text-align:center;
+  transform:scale(0.96) translateY(8px);
+  opacity:.96;
+  transition:transform var(--xz-dur-slow) var(--xz-ease),opacity var(--xz-dur-slow) var(--xz-ease);
 }
+.xz-modal.is-open .xz-modal__card{transform:scale(1) translateY(0);opacity:1}
 @media(min-width:1024px){
   .xz-modal__card{width:min(100%,380px);padding:28px 28px 32px}
 }
@@ -159,8 +169,8 @@ section.about-hero > .ph{
   width:36px;height:36px;border:0;border-radius:50%;
   background:transparent;color:var(--muted);
   font-size:24px;line-height:1;cursor:pointer;
+  transition:color var(--xz-dur) var(--xz-ease),background-color var(--xz-dur) var(--xz-ease);
 }
-.xz-modal__close:hover{color:var(--ink);background:rgba(91,122,110,.1)}
 .xz-modal__title{
   margin:8px 0 8px;font-size:18px;font-weight:600;color:var(--jade);
 }
@@ -312,3 +322,52 @@ section.about-hero > .ph{
   .pdp-page .pdp-sec{padding:22px 0}
 }
 /* end PDP */
+
+/* === Soft motion (Tyrone-approved pack) === */
+.btn,.chip,.sticky-cta,.top-cta{
+  transition:background-color var(--xz-dur) var(--xz-ease),color var(--xz-dur) var(--xz-ease),border-color var(--xz-dur) var(--xz-ease),opacity var(--xz-dur) var(--xz-ease),transform var(--xz-dur-fast) var(--xz-ease),box-shadow var(--xz-dur) var(--xz-ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:active,.chip:active,.sticky-cta:active,.top-cta:active,a.btn:active{transform:scale(0.98)}
+.chip.on{
+  transition:background-color var(--xz-dur) var(--xz-ease),color var(--xz-dur) var(--xz-ease),border-color var(--xz-dur) var(--xz-ease),transform var(--xz-dur-fast) var(--xz-ease);
+}
+.card{
+  transition:transform var(--xz-dur) var(--xz-ease),box-shadow var(--xz-dur) var(--xz-ease),border-color var(--xz-dur) var(--xz-ease);
+}
+.card:active{transform:scale(0.99)}
+.nav a{
+  transition:color var(--xz-dur) var(--xz-ease),border-color var(--xz-dur) var(--xz-ease);
+}
+@media (hover:hover){
+  .btn:hover{background:var(--jade-d);border-color:var(--jade-d)}
+  .btn.ghost:hover{background:rgba(91,122,110,.08);color:var(--jade-d)}
+  .chip:hover:not(.on){border-color:var(--jade);color:var(--jade-d)}
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(25,28,26,.08)}
+  .sticky-cta:hover,.top-cta:hover{filter:brightness(1.05)}
+  .nav a:hover{color:var(--jade-d)}
+  .xz-modal__close:hover{color:var(--ink);background:rgba(91,122,110,.1)}
+}
+
+/* Optional section enter — wire .xz-reveal + .is-in; above-fold can ship with .is-in */
+.xz-reveal{
+  opacity:0;transform:translateY(10px);
+  transition:opacity var(--xz-dur-slow) var(--xz-ease),transform var(--xz-dur-slow) var(--xz-ease);
+}
+.xz-reveal.is-in{opacity:1;transform:translateY(0)}
+.xz-reveal.is-in:nth-child(1){transition-delay:0ms}
+.xz-reveal.is-in:nth-child(2){transition-delay:40ms}
+.xz-reveal.is-in:nth-child(3){transition-delay:80ms}
+.xz-reveal.is-in:nth-child(4){transition-delay:120ms}
+
+/* Optional img fade — do NOT put xz-img-fade on LCP/above-fold hero */
+img.xz-img-fade{opacity:0;transition:opacity var(--xz-dur) var(--xz-ease)}
+img.xz-img-fade.is-loaded{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  :root{--xz-dur-fast:0.01ms;--xz-dur:0.01ms;--xz-dur-slow:0.01ms}
+  html{scroll-behavior:auto}
+  .xz-reveal,.xz-reveal.is-in,.xz-modal.is-open .xz-modal__card,.xz-modal__card,.card,.btn,.chip,.sticky-cta,.xz-img-fade{
+    transform:none!important;
+  }
+}
