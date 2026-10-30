@@ -58,3 +58,72 @@ blockquote{margin:12px 0;padding:10px 14px;border-left:3px solid var(--jade);col
  .sec{padding-top:44px;padding-bottom:44px}
  .sticky-cta{left:auto;right:24px;bottom:24px;width:auto;min-width:160px;height:44px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 }
+
+/* mood dummies — Option A, reversible */
+/* Keep .ph-t / .ph-c (待 Leanne 素材). Soft ivory wash for caption readability. */
+.hero-ph,
+.hero-v .ph,
+.hk-hero .ph,
+section.about-hero > .ph,
+.band .about-hero > .ph,
+.grid .card .ph,
+.feed .post .post-im .ph{
+  background-color:transparent;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+/* Heroes — 4:3 mobile crops */
+.hero-ph,
+.hero-v .ph{
+  background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/home-hero-43.jpg");
+}
+.hk-hero .ph{
+  background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/hk-hero-43.jpg");
+}
+section.about-hero > .ph{
+  background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/about-hero-01-43.jpg");
+}
+.band .about-hero > .ph{
+  background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/about-hero-02-43.jpg");
+}
+/* Heroes — 16:9 desktop */
+@media (min-width:1024px){
+  .hero-ph,
+  .hero-v .ph{
+    background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/home-hero.jpg");
+  }
+  .hk-hero .ph{
+    background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/hk-hero.jpg");
+  }
+  section.about-hero > .ph{
+    background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/about-hero-01.jpg");
+  }
+  .band .about-hero > .ph{
+    background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/about-hero-02.jpg");
+  }
+}
+/* Product cards — home (6) + products (12); same order */
+.grid .card:nth-child(1) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-01.jpg")}
+.grid .card:nth-child(2) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-02.jpg")}
+.grid .card:nth-child(3) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-03.jpg")}
+.grid .card:nth-child(4) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-04.jpg")}
+.grid .card:nth-child(5) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-05.jpg")}
+.grid .card:nth-child(6) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-06.jpg")}
+.grid .card:nth-child(7) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-07.jpg")}
+.grid .card:nth-child(8) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-08.jpg")}
+.grid .card:nth-child(9) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-09.jpg")}
+.grid .card:nth-child(10) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-10.jpg")}
+.grid .card:nth-child(11) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-11.jpg")}
+.grid .card:nth-child(12) .ph{background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/product-12.jpg")}
+/* Finds F01–F05 */
+.feed .post:nth-child(1) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-01.jpg")}
+.feed .post:nth-child(1) .post-im .ph:nth-child(2){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-02.jpg")}
+.feed .post:nth-child(2) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-03.jpg")}
+.feed .post:nth-child(3) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-04.jpg")}
+.feed .post:nth-child(3) .post-im .ph:nth-child(2){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-05.jpg")}
+.feed .post:nth-child(3) .post-im .ph:nth-child(3){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-06.jpg")}
+.feed .post:nth-child(4) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-07.jpg")}
+.feed .post:nth-child(5) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-08.jpg")}
+.feed .post:nth-child(5) .post-im .ph:nth-child(2){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-09.jpg")}
+/* end mood dummies — Option A */
