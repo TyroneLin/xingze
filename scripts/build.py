@@ -250,9 +250,15 @@ def cat_label(categories: dict, key: str) -> str:
 
 
 def related_items(it: dict, all_items: list, n: int = 3) -> list:
+    """Prefer same category, then diversify (Design mock: 2 same + 1 other)."""
     same = [x for x in all_items if x["id"] != it["id"] and x["category"] == it["category"]]
     other = [x for x in all_items if x["id"] != it["id"] and x["category"] != it["category"]]
-    return (same + other)[:n]
+    pick = same[:2]
+    need = n - len(pick)
+    pick += other[:need]
+    if len(pick) < n:
+        pick += same[2 : 2 + (n - len(pick))]
+    return pick[:n]
 
 
 def product_page(
