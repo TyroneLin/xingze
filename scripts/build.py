@@ -3,7 +3,7 @@
 
 Source of truth:
   - data/*.json  → list content (products, finds, hk-agent)
-  - css/style.css, js/render.js (chip filters ONLY) → copied to dist/
+  - css/style.css, js/render.js, js/wechat-modal.js → copied to dist/
   - SEO titles/descriptions locked in this file (see SEO-META-LOCKED.md)
   - root assets (favicon*, share*.jpg, apple-touch-icon, icon-192) → copied to dist/
 
@@ -187,12 +187,24 @@ def shell(key: str, pre: str, cur: str, main: str) -> str:
     brand = pre or "./"
     return f"""{head(key, pre)}
 <body>
-<header class="top"><div class="wrap top-in"><a class="brand" href="{brand}"><b>星泽</b><span>天然晶石 · 东方文玩 · 港澳专柜代采</span></a><nav class="nav" aria-label="主导航">{navs}</nav><a class="btn sm top-cta" href="#wechat">微信咨询</a></div></header>
+<header class="top"><div class="wrap top-in"><a class="brand" href="{brand}"><b>星泽</b><span>天然晶石 · 东方文玩 · 港澳专柜代采</span></a><nav class="nav" aria-label="主导航">{navs}</nav><a class="btn sm top-cta" href="#wechat" data-wechat-consult>微信咨询</a></div></header>
 <main>{main}</main>
-<section id="wechat" class="wrap wx-note"><h2>微信咨询</h2><p>主理人 Leanne 一对一亲复。微信号 / 二维码：<strong>待 CTA</strong>（待 Leanne 提供，本站不展示虚构微信号）。</p></section>
+<section id="wechat" class="wrap wx-note"><h2>微信咨询</h2><p>主理人 Leanne 一对一亲复。点击「微信咨询」扫码添加（二维码占位，待 Leanne 正式素材）。本站不展示虚构微信号。</p></section>
 <footer class="foot"><div class="wrap foot-g"><div><b>星泽 Xingze Studio</b><p class="muted">主理人 · Leanne</p><p>深港两地往返巡鉴，专注文玩晶石真品品鉴与港澳正品专柜买手直采。一物一图，宁缺毋滥。</p></div><div><p>深圳 · 香港（地址待 Leanne 确认）</p><p class="muted">全站藏品仅供美学品鉴与定向预约，微信点对点发图。</p></div><div><p class="foot-lock">本站仅介绍，不在线收款</p><p class="muted">© 2026 星泽 Xingze Studio</p></div></div></footer>
-<a class="sticky-cta" href="#wechat" aria-label="微信咨询（待 CTA）">微信咨询</a>
+<a class="sticky-cta" href="#wechat" data-wechat-consult aria-label="微信咨询">微信咨询</a>
+<div id="wechat-modal" class="xz-modal" hidden>
+  <div class="xz-modal__backdrop" data-close-wechat></div>
+  <div class="xz-modal__card" role="dialog" aria-modal="true" aria-labelledby="wechat-modal-title">
+    <button type="button" class="xz-modal__close" data-close-wechat aria-label="关闭">×</button>
+    <h2 id="wechat-modal-title" class="xz-modal__title">微信扫码咨询</h2>
+    <p class="xz-modal__hint">打开微信扫一扫，添加星泽咨询</p>
+    <div class="xz-modal__qr">
+      <img src="/images/wechat/qr-placeholder.jpg" width="240" height="240" alt="待 Leanne 素材 · 微信二维码占位" />
+    </div>
+  </div>
+</div>
 <script src="{pre}js/render.js" defer></script>
+<script src="{pre}js/wechat-modal.js" defer></script>
 </body>
 </html>
 """
@@ -305,6 +317,7 @@ def build():
     (DIST / "js").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "css" / "style.css", DIST / "css" / "style.css")
     shutil.copy2(ROOT / "js" / "render.js", DIST / "js" / "render.js")
+    shutil.copy2(ROOT / "js" / "wechat-modal.js", DIST / "js" / "wechat-modal.js")
     if GATE:
         shutil.copy2(ROOT / "js" / "gate.js", DIST / "js" / "gate.js")
         print("gate ON → dist/js/gate.js")

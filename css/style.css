@@ -127,3 +127,51 @@ section.about-hero > .ph{
 .feed .post:nth-child(5) .post-im .ph:nth-child(1){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-08.jpg")}
 .feed .post:nth-child(5) .post-im .ph:nth-child(2){background-image:linear-gradient(rgba(247,243,234,.45),rgba(247,243,234,.45)),url("../images/mood/finds-09.jpg")}
 /* end mood dummies — Option A */
+
+/* WeChat consult modal — Designer Option A */
+.xz-modal{
+  position:fixed;inset:0;z-index:1100;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  font-family:var(--f);
+}
+.xz-modal:not(.is-open){display:none}
+.xz-modal__backdrop{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.48);
+}
+.xz-modal__card{
+  position:relative;z-index:1;
+  width:min(100%,320px);
+  background:var(--ivory);
+  color:var(--ink);
+  border-radius:16px;
+  padding:24px 20px 28px;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);
+  border-top:3px solid var(--jade);
+  text-align:center;
+}
+@media(min-width:1024px){
+  .xz-modal__card{width:min(100%,380px);padding:28px 28px 32px}
+}
+.xz-modal__close{
+  position:absolute;top:10px;right:12px;
+  width:36px;height:36px;border:0;border-radius:50%;
+  background:transparent;color:var(--muted);
+  font-size:24px;line-height:1;cursor:pointer;
+}
+.xz-modal__close:hover{color:var(--ink);background:rgba(91,122,110,.1)}
+.xz-modal__title{
+  margin:8px 0 8px;font-size:18px;font-weight:600;color:var(--jade);
+}
+.xz-modal__hint{
+  margin:0 0 16px;font-size:13px;color:var(--muted);line-height:1.5;
+}
+.xz-modal__qr img{
+  display:block;margin:0 auto;
+  width:min(220px,70vw);height:auto;
+  border-radius:8px;background:#fff;
+}
+@media(min-width:1024px){
+  .xz-modal__qr img{width:240px}
+}
