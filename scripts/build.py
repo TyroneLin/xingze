@@ -105,18 +105,19 @@ def chips(categories: dict, label: str) -> str:
     return f'<div class="chips" role="tablist" aria-label="{E(label)}">{"".join(bits)}</div>'
 
 
-def product_card(it: dict, origins: dict) -> str:
+def product_card(it: dict, origins: dict, pdp_href: str) -> str:
     tags = "".join(
         f'<span class="tag">{apply_origins(t, origins)}</span>' for t in it["tags"]
     )
+    cap = it.get("imageAlt") if it.get("imageAlt") and it.get("imageAlt") != PH else ""
     return (
         f'<article class="card" data-cat="{E(it["category"])}">'
-        f'{ph(it.get("imageAlt") if it.get("imageAlt") and it.get("imageAlt") != PH else "")}'
+        f'<a class="card-media" href="{E(pdp_href)}" aria-label="{E(it["title"])}">{ph(cap)}</a>'
         f'<div class="card-b"><div class="tags">{tags}</div>'
         f'<p class="meta">{apply_origins(it["spec"], origins)} · 编号 {E(it["id"])}</p>'
-        f'<h3>{E(it["title"])}</h3><p>{E(it["desc"])}</p>'
+        f'<h3><a class="card-title" href="{E(pdp_href)}">{E(it["title"])}</a></h3><p>{E(it["desc"])}</p>'
         f'<div class="card-f"><span class="muted">纯私域交流 · 无线上标价</span>'
-        f'<a class="btn sm" href="#wechat">{E(it["cta"])} →</a></div></div></article>'
+        f'<a class="btn sm" href="{E(pdp_href)}">查看详情 →</a></div></div></article>'
     )
 
 
@@ -135,8 +136,8 @@ def find_card(it: dict) -> str:
     )
 
 
-def head(key: str, pre: str) -> str:
-    s = SEO[key]
+def head(key: str, pre: str, override: dict | None = None) -> str:
+    s = override if override else SEO[key]
     fav = f"{pre}favicon.ico"
     fav32 = f"{pre}favicon-32.png"
     touch = f"{pre}apple-touch-icon.png"
@@ -179,14 +180,23 @@ def head(key: str, pre: str) -> str:
 </head>"""
 
 
-def shell(key: str, pre: str, cur: str, main: str) -> str:
+def shell(
+    key: str,
+    pre: str,
+    cur: str,
+    main: str,
+    *,
+    override: dict | None = None,
+    body_class: str = "",
+) -> str:
     navs = "".join(
         f'<a href="{pre}{h}"{" aria-current=page" if h == cur else ""}>{t}</a>'
         for h, t in NAV
     )
     brand = pre or "./"
-    return f"""{head(key, pre)}
-<body>
+    body_attr = f' class="{body_class}"' if body_class else ""
+    return f"""{head(key, pre, override)}
+<body{body_attr}>
 <header class="top"><div class="wrap top-in"><a class="brand" href="{brand}"><b>星泽</b><span>天然晶石 · 东方文玩 · 港澳专柜代采</span></a><nav class="nav" aria-label="主导航">{navs}</nav><a class="btn sm top-cta" href="#wechat" data-wechat-consult>微信咨询</a></div></header>
 <main>{main}</main>
 <section id="wechat" class="wrap wx-note"><h2>微信咨询</h2><p>主理人 Leanne 一对一亲复。点击「微信咨询」扫码添加（二维码占位，待 Leanne 正式素材）。本站不展示虚构微信号。</p></section>
@@ -234,7 +244,140 @@ def trust_html() -> str:
     )
 
 
+
+def cat_label(categories: dict, key: str) -> str:
+    return categories.get(key, key)
+
+
+def related_items(it: dict, all_items: list, n: int = 3) -> list:
+    same = [x for x in all_items if x["id"] != it["id"] and x["category"] == it["category"]]
+    other = [x for x in all_items if x["id"] != it["id"] and x["category"] != it["category"]]
+    return (same + other)[:n]
+
+
+def product_page(
+    it: dict,
+    origins: dict,
+    categories: dict,
+    all_items: list,
+    mood_idx: int,
+    pre: str,
+) -> str:
+    """Bake one PDP from Design NOTES + pdp-xz-c01 mock structure."""
+    cat = cat_label(categories, it["category"])
+    tags_html = "".join(
+        f'<span class="tag">{apply_origins(t, origins)}</span>' for t in it["tags"]
+    )
+    tags_plain = " · ".join(
+        re.sub(r"\{(o\d)\}", lambda m: origins.get(m.group(1), m.group(0)), t)
+        for t in it["tags"]
+    )
+    cta = it.get("cta") or "私信结缘"
+    mood_n = f"{mood_idx:02d}"
+    mood_src = f"{pre}images/mood/product-{mood_n}.jpg"
+    has_img = bool(it.get("image"))
+    if has_img:
+        img_src = it["image"] if str(it["image"]).startswith(("http", "/")) else f"{pre}{it['image'].lstrip('/')}"
+        hero_inner = (
+            f'<img src="{E(img_src)}" alt="{E(it.get("imageAlt") or it["title"])}"/>'
+            f'<div class="wash"></div>'
+        )
+        img_status = "已上传"
+    else:
+        hero_inner = (
+            f'<img src="{E(mood_src)}" alt="{PH} · {E(it["title"])} mood 占位"/>'
+            f'<div class="wash"></div>'
+            f'<span class="stamp">{PH}</span>'
+        )
+        img_status = "待 Leanne 正式素材（当前 mood 占位）"
+
+    rel = related_items(it, all_items, 3)
+    # related cards link sibling PDP at same depth: ../OTHER_ID/
+    rel_html = ""
+    for r in rel:
+        # find mood index of related among all_items (1-based)
+        r_idx = next(i for i, x in enumerate(all_items, 1) if x["id"] == r["id"])
+        r_mood = f"{pre}images/mood/product-{r_idx:02d}.jpg"
+        rel_html += (
+            f'<a class="rel-card" href="../{E(r["id"])}/">'
+            f'<div class="thumb"><img src="{E(r_mood)}" alt="{PH}"/>'
+            f'<span class="stamp">{PH}</span></div>'
+            f'<div class="card-b"><h3>{E(r["title"])}</h3>'
+            f'<p class="meta">{E(r["id"])} · {apply_origins(r["spec"], origins)}</p>'
+            f'</div></a>'
+        )
+
+    return f"""<div class="wrap">
+    <nav class="bc" aria-label="面包屑">
+      <a href="../">← 返回产品</a>
+      <span class="sep">·</span>
+      <a href="../">产品</a>
+      <span class="sep">›</span>
+      <span class="cur">{E(it["title"])}</span>
+    </nav>
+  </div>
+
+  <section class="wrap pdp">
+    <div class="pdp-grid">
+      <div class="hero-ph" role="img" aria-label="{PH} · {E(it["title"])}">
+        {hero_inner}
+      </div>
+      <div class="info">
+        <p class="sku">编号 {E(it["id"])} · {E(cat)}</p>
+        <h1>{E(it["title"])}</h1>
+        <p class="spec-line">{apply_origins(it["spec"], origins)}</p>
+        <div class="tags">{tags_html}</div>
+        <div class="trust-line"><b>纯私域交流 · 无线上标价</b></div>
+        <p class="desc">{E(it["desc"])}</p>
+        <div class="cta-row">
+          <a class="btn block" href="#wechat" data-wechat-consult>{E(cta)}</a>
+          <span class="cta-note">一物一图 · 微信点对点沟通 · 本站不收款</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="pdp-sec">
+      <div class="sh">
+        <span class="eyebrow">Detail</span>
+        <h2>规格与详情</h2>
+      </div>
+      <div class="box">
+        <dl class="spec-grid">
+          <div class="spec-row"><dt>编号</dt><dd>{E(it["id"])}</dd></div>
+          <div class="spec-row"><dt>品类</dt><dd>{E(cat)}</dd></div>
+          <div class="spec-row"><dt>规格</dt><dd>{apply_origins(it["spec"], origins)}</dd></div>
+          <div class="spec-row"><dt>标签</dt><dd>{E(tags_plain)}</dd></div>
+          <div class="spec-row"><dt>简述</dt><dd>{E(it["desc"])}</dd></div>
+          <div class="spec-row"><dt>图片</dt><dd>{E(img_status)}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="pdp-sec">
+      <div class="sh">
+        <span class="eyebrow">Trust</span>
+        <h2>结缘说明</h2>
+      </div>
+      <div class="trust-strip">
+        <div class="box"><h3>私域结缘</h3><p>微信一对一沟通</p></div>
+        <div class="box"><h3>专柜同源</h3><p>港澳采买可溯</p></div>
+        <div class="box"><h3>本站仅介绍</h3><p>不在线收款</p></div>
+      </div>
+      <p class="muted sm pdp-flow">流程概要：咨询沟通 → 细节确认（一物一视频）→ 安心发货。价格与现货状态均在微信私域确认，本页不展示标价或购物车。</p>
+    </section>
+
+    <section class="pdp-sec">
+      <div class="sh">
+        <span class="eyebrow">More</span>
+        <h2>相关藏品</h2>
+      </div>
+      <div class="rel-grid">{rel_html}</div>
+    </section>
+  </section>"""
+
+
 def write(rel: str, content: str):
+
     path = DIST / rel
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -250,7 +393,7 @@ def build():
     origins = pj.get("origins", {})
 
     # --- home ---
-    home_cards = "".join(product_card(i, origins) for i in pj["items"][:6])
+    home_cards = "".join(product_card(i, origins, f'products/{i["id"]}/') for i in pj["items"][:6])
     home = f"""<section class="wrap hero"><div class="hero-t"><span class="eyebrow">私域品鉴 · Shenzhen &amp; Hong Kong Atelier</span><h1>星泽 · Leanne 工作室</h1><p class="meta">精选工坊（地点待 Leanne 确认） / 港澳常驻代采</p><p>专注天然能量晶石、传世文玩雅件与身心调养好物。坚持实物一物一图、实体工坊现货品控、港澳专柜源头采买。纯私域交流与品鉴，无线上购物车。</p><div class="hero-k"><div class="box"><b>一物一图</b><span class="muted">实体工作室现货</span></div><div class="box"><b>港澳小票</b><span class="muted">专柜采买溯源小票</span></div></div></div><div class="hero-v">{ph("陈列空间 · 港澳专柜选品动态（地点待 Leanne 确认）","hero-ph")}<p class="muted sm">宁缺毋滥，每期私享仅呈精粹 · 支持预约同城上手品赏</p></div></section>
 <section class="wrap sec">{sh("Curation Showcase","精选雅蓄 · 藏品展席","静心筛选 · 寻觅心仪眼缘")}{chips(pj["categories"],"藏品分类")}<div class="grid" data-filter-target="products">{home_cards}</div><p class="more"><a class="btn ghost" href="products/">查看全部产品 →</a></p></section>
 <section class="band"><div class="wrap sec">{sh("Bespoke Journey","定制与交流流程","以文人会友的从容态度，通过一对一私享交流完成鉴赏与托付。")}<div class="g3"><div class="box step"><span class="num">01</span><h3>咨询沟通</h3><p>沟通心仪品类、预算或香港代购需求。</p></div><div class="box step"><span class="num">02</span><h3>细节确认</h3><p>一物一视频、自然光无滤镜细节，核对尺寸重量。</p></div><div class="box step"><span class="num">03</span><h3>安心发货</h3><p>顺丰保价，防震包装，港澳直邮附专柜小票。</p></div></div></div></section>
@@ -258,11 +401,33 @@ def build():
     write("index.html", shell("home", "", "", home))
 
     # --- products ---
-    all_cards = "".join(product_card(i, origins) for i in pj["items"])
+    all_cards = "".join(product_card(i, origins, f'{i["id"]}/') for i in pj["items"])
     prod = f"""<section class="wrap phead"><span class="eyebrow">Xingze Curated Collection / 现物鉴赏库</span><h1>产品</h1><p class="lead">深港双城私藏 · 一物一相 · 静待有缘人品鉴</p><p>水晶、文玩与健康好物信息展示。星泽不设购物车，所有展出之器皆由主理人 Leanne 亲采挑验，一物一图；价格请通过微信咨询确认。</p></section>
 <section class="wrap sec">{chips(pj["categories"],"藏品分类")}<div class="grid g-4" data-filter-target="products">{all_cards}</div></section>
 <section class="band"><div class="wrap sec">{sh("鉴赏与信任守则","为何坚持私信咨询，而非直接标价付款？","天然物华独一无二，克重、纹理与成色皆需在自然光下细审。")}{trust_html()}</div></section>"""
     write("products/index.html", shell("products", "../", "products/", prod))
+
+    # --- product detail pages (PDP) ---
+    cats = pj.get("categories", {})
+    items = pj["items"]
+    for idx, it in enumerate(items, 1):
+        seo = {
+            "title": f'{it["title"]}｜星泽',
+            "desc": f'{it["desc"]} 编号 {it["id"]} · {cat_label(cats, it["category"])}。星泽一物一图，微信私信结缘；本站仅介绍，不在线收款。',
+            "path": f'/products/{it["id"]}/',
+        }
+        main = product_page(it, origins, cats, items, idx, "../../")
+        write(
+            f'products/{it["id"]}/index.html',
+            shell(
+                "products",
+                "../../",
+                "products/",
+                main,
+                override=seo,
+                body_class="pdp-page",
+            ),
+        )
 
     # --- finds ---
     feed = "".join(find_card(i) for i in fj["items"])
