@@ -2,7 +2,7 @@
 
 Hard: always bake HTML + titles/meta/og. Never leave public site as client-fetch shells.
 Gate: XZ_GATE default ON (env).
-Stub-safe: returns 501 until COS credentials / role are wired.
+Credentials: TENCENT_SECRET_ID/KEY or DefaultCredentialProvider / SCF execution role.
 """
 from __future__ import annotations
 
@@ -15,9 +15,8 @@ from pathlib import Path
 from common import (
     COS_BUCKET,
     COS_REGION,
-    TENCENT_SECRET_ID,
-    TENCENT_SECRET_KEY,
     bearer_token,
+    tencent_credential,
     options_ok,
     response,
     verify_session_token,
@@ -31,13 +30,21 @@ SITE_PACKAGE = Path(__file__).resolve().parent / "site"
 def _cos_client():
     from qcloud_cos import CosConfig, CosS3Client
 
-    if not TENCENT_SECRET_ID or not TENCENT_SECRET_KEY:
+    cred = tencent_credential()
+    if cred is None:
         return None
+
+    secret_id = getattr(cred, "secret_id", None) or getattr(cred, "secretId", None)
+    secret_key = getattr(cred, "secret_key", None) or getattr(cred, "secretKey", None)
+    token = getattr(cred, "token", None)
+    if not secret_id or not secret_key:
+        return None
+
     config = CosConfig(
         Region=COS_REGION,
-        SecretId=TENCENT_SECRET_ID,
-        SecretKey=TENCENT_SECRET_KEY,
-        Token=None,
+        SecretId=secret_id,
+        SecretKey=secret_key,
+        Token=token,
         Scheme="https",
     )
     return CosS3Client(config)
@@ -104,7 +111,7 @@ def main_handler(event, context):
             {
                 "ok": False,
                 "error": "rebuild_not_configured",
-                "hint": "Set TENCENT_SECRET_ID/KEY or bind SCF role with cos:GetObject/PutObject on xingze bucket; package site/ templates into function zip (see README).",
+                "hint": "Bind SCF execution role with cos:GetObject/PutObject (DefaultCredentialProvider / SCF role), or set TENCENT_SECRET_ID/KEY; package site/ templates into function zip (see README).",
             },
         )
 

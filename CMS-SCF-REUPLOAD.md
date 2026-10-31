@@ -4,6 +4,8 @@
 
 **不要改：** `ADMIN_PASSWORD_HASH` / 其它环境变量 / Function URL。只换代码包。
 
+**STS/rebuild creds:** when `TENCENT_SECRET_ID/KEY` are empty, handlers use `DefaultCredentialProvider` (SCF execution role). Re-pack after `common.py` / `sts.py` / `rebuild.py` credential fixes.
+
 **运行时：** 本 zip 按 **Python 3.9** 打包并 pin `urllib3>=1.26.18,<2.0` + `requests>=2.28,<2.32`。控制台函数运行时须为 **3.9**（或改用未 pin 的 urllib3 2.x 则升到 **3.10+**）。
 
 ## 现成 zip（本机已打好）

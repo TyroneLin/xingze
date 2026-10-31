@@ -31,6 +31,8 @@ Personal stack only: COS HK `xingze-1520303651`, SCF `ap-hongkong`, domain `www.
 
 See `CMS-TYRONE-CONSOLE.md` and `scf/cms/README.md`. Placeholders `REPLACE_*` mean not live yet.
 
+STS/rebuild use `tencent_credential()`: explicit `TENCENT_SECRET_ID/KEY` when set, else `DefaultCredentialProvider` / SCF execution-role env.
+
 ## Local bake
 
 ```bash

@@ -18,7 +18,7 @@ SESSION_SECRET = os.environ.get("SESSION_SECRET", "REPLACE_SESSION_SECRET")
 ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH", "REPLACE_ADMIN_PASSWORD_HASH")
 # CAM role ARN for STS AssumeRole (Tyrone creates).
 CMS_STS_ROLE_ARN = os.environ.get("CMS_STS_ROLE_ARN", "REPLACE_CMS_STS_ROLE_ARN")
-# Optional: SCF uses its own role; SecretId/Key only if not using instance role.
+# Optional explicit secrets; prefer SCF execution role via tencent_credential().
 TENCENT_SECRET_ID = os.environ.get("TENCENT_SECRET_ID", "")
 TENCENT_SECRET_KEY = os.environ.get("TENCENT_SECRET_KEY", "")
 COS_BUCKET = os.environ.get("COS_BUCKET", "xingze-1520303651")
@@ -133,3 +133,67 @@ def hash_password_cli(password: str, iterations: int = 200_000) -> str:
         "sha256", password.encode("utf-8"), salt, iterations, dklen=32
     )
     return f"{salt.hex()}${iterations}${digest.hex()}"
+
+
+def tencent_credential():
+    """Return a tencentcloud Credential for STS / COS API calls.
+
+    Order:
+      1. TENCENT_SECRET_ID + TENCENT_SECRET_KEY (explicit env, no session token)
+      2. DefaultCredentialProvider (TENCENTCLOUD_SECRET_ID/KEY → profile → CVM/SCF role)
+      3. SCF-injected env variants: TENCENTCLOUD_SECRETID/SECRETKEY/SESSIONTOKEN
+         and SECRET_ID / SECRET_KEY / SESSION_TOKEN
+
+    Returns None if the SDK is missing or no credential is available.
+    """
+    try:
+        from tencentcloud.common import credential
+        from tencentcloud.common.exception.tencent_cloud_sdk_exception import (
+            TencentCloudSDKException,
+        )
+    except ImportError:
+        return None
+
+    if TENCENT_SECRET_ID and TENCENT_SECRET_KEY:
+        return credential.Credential(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
+
+    try:
+        cred = credential.DefaultCredentialProvider().get_credential()
+        if cred is not None:
+            return cred
+    except TencentCloudSDKException:
+        pass
+    except Exception:
+        pass
+
+    # Explicit SCF / container env fallbacks (names vary by runtime).
+    id_keys = (
+        "TENCENTCLOUD_SECRETID",
+        "TENCENTCLOUD_SECRET_ID",
+        "SECRET_ID",
+    )
+    key_keys = (
+        "TENCENTCLOUD_SECRETKEY",
+        "TENCENTCLOUD_SECRET_KEY",
+        "SECRET_KEY",
+    )
+    token_keys = (
+        "TENCENTCLOUD_SESSIONTOKEN",
+        "TENCENTCLOUD_SESSION_TOKEN",
+        "SESSION_TOKEN",
+    )
+
+    sid = next((os.environ.get(k) or "" for k in id_keys if os.environ.get(k)), "")
+    skey = next((os.environ.get(k) or "" for k in key_keys if os.environ.get(k)), "")
+    token = next((os.environ.get(k) or "" for k in token_keys if os.environ.get(k)), "") or None
+
+    if sid and skey:
+        try:
+            return credential.Credential(sid, skey, token)
+        except Exception:
+            return None
+    return None
+
+
+# Back-compat alias (prefer tencent_credential).
+cloud_credential = tencent_credential

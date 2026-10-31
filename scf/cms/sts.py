@@ -1,24 +1,22 @@
 """POST /sts — after session auth → short-lived COS STS via AssumeRole.
 
-Env: CMS_STS_ROLE_ARN, TENCENT_SECRET_ID/KEY (or SCF role), COS_BUCKET, COS_REGION
+Env: CMS_STS_ROLE_ARN, TENCENT_SECRET_ID/KEY (optional), COS_BUCKET, COS_REGION
+Credentials: explicit env secrets, else DefaultCredentialProvider / SCF execution role.
 Policy prefixes: data/*.json, images/products|finds|wechat/*
-Stub: returns 501 with shape until Tyrone creates the CAM role.
 """
 from __future__ import annotations
 
 import json
-import os
 
 from common import (
     CMS_STS_ROLE_ARN,
     COS_BUCKET,
     COS_REGION,
     STS_DURATION,
-    TENCENT_SECRET_ID,
-    TENCENT_SECRET_KEY,
     bearer_token,
     options_ok,
     response,
+    tencent_credential,
     verify_session_token,
 )
 
@@ -66,29 +64,22 @@ def main_handler(event, context):
             },
         )
 
-    # Live AssumeRole path — runs only when role + secrets are configured.
+    # Live AssumeRole path — role ARN required; creds from env or SCF execution role.
     try:
-        from tencentcloud.common import credential
         from tencentcloud.common.profile.client_profile import ClientProfile
         from tencentcloud.common.profile.http_profile import HttpProfile
         from tencentcloud.sts.v20180813 import models, sts_client
     except ImportError:
         return response(500, {"ok": False, "error": "sdk_missing", "hint": "pip install tencentcloud-sdk-python"})
 
-    if TENCENT_SECRET_ID and TENCENT_SECRET_KEY:
-        cred = credential.Credential(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
-    else:
-        # Prefer SCF execution role (CVM/SCF role provider) when available
-        try:
-            from tencentcloud.common.credential import STSAssumeRoleCredential  # noqa: F401
-        except Exception:
-            pass
+    cred = tencent_credential()
+    if cred is None:
         return response(
             501,
             {
                 "ok": False,
                 "error": "sts_credentials_missing",
-                "hint": "Bind SCF execution role that can sts:AssumeRole on CMS_STS_ROLE_ARN, or set TENCENT_SECRET_ID/KEY in env (prefer role).",
+                "hint": "Bind SCF execution role that can sts:AssumeRole on CMS_STS_ROLE_ARN (DefaultCredentialProvider), or set TENCENT_SECRET_ID/KEY in env (prefer role).",
             },
         )
 
