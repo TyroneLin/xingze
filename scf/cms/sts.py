@@ -114,21 +114,26 @@ def main_handler(event, context):
         req.from_json_string(json.dumps(params))
         resp = client.AssumeRole(req)
         creds = resp.Credentials
-        return response(
-            200,
-            {
-                "ok": True,
-                "bucket": COS_BUCKET,
-                "region": COS_REGION,
-                "expiredTime": resp.ExpiredTime,
-                "startTime": resp.StartTime,
-                "credentials": {
-                    "tmpSecretId": creds.TmpSecretId,
-                    "tmpSecretKey": creds.TmpSecretKey,
-                    "sessionToken": creds.Token,
-                },
-                "allowedPrefixes": ALLOWED_PREFIXES,
+        # SDK AssumeRoleResponse has ExpiredTime/Expiration/RequestId — not StartTime.
+        expired = getattr(resp, "ExpiredTime", None)
+        start = getattr(resp, "StartTime", None)
+        if start is None and expired is not None:
+            start = int(expired) - STS_DURATION
+        body = {
+            "ok": True,
+            "bucket": COS_BUCKET,
+            "region": COS_REGION,
+            "credentials": {
+                "tmpSecretId": creds.TmpSecretId,
+                "tmpSecretKey": creds.TmpSecretKey,
+                "sessionToken": creds.Token,
             },
-        )
+            "allowedPrefixes": ALLOWED_PREFIXES,
+        }
+        if expired is not None:
+            body["expiredTime"] = expired
+        if start is not None:
+            body["startTime"] = start
+        return response(200, body)
     except Exception as e:
         return response(502, {"ok": False, "error": "assume_role_failed", "detail": str(e)[:300]})
