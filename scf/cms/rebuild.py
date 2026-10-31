@@ -16,7 +16,7 @@ from common import (
     COS_BUCKET,
     COS_REGION,
     bearer_token,
-    tencent_credential,
+    cloud_credential,
     options_ok,
     response,
     verify_session_token,
@@ -30,7 +30,7 @@ SITE_PACKAGE = Path(__file__).resolve().parent / "site"
 def _cos_client():
     from qcloud_cos import CosConfig, CosS3Client
 
-    cred = tencent_credential()
+    cred = cloud_credential()
     if cred is None:
         return None
 

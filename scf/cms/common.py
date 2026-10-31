@@ -18,11 +18,30 @@ SESSION_SECRET = os.environ.get("SESSION_SECRET", "REPLACE_SESSION_SECRET")
 ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH", "REPLACE_ADMIN_PASSWORD_HASH")
 # CAM role ARN for STS AssumeRole (Tyrone creates).
 CMS_STS_ROLE_ARN = os.environ.get("CMS_STS_ROLE_ARN", "REPLACE_CMS_STS_ROLE_ARN")
-# Optional explicit secrets; prefer SCF execution role via tencent_credential().
+# Optional: SCF uses its own role; SecretId/Key only if not using instance role.
 TENCENT_SECRET_ID = os.environ.get("TENCENT_SECRET_ID", "")
 TENCENT_SECRET_KEY = os.environ.get("TENCENT_SECRET_KEY", "")
 COS_BUCKET = os.environ.get("COS_BUCKET", "xingze-1520303651")
 COS_REGION = os.environ.get("COS_REGION", "ap-hongkong")
+
+
+def _derive_cos_appid(bucket: str) -> str:
+    """COS AppId for CAM resource ARNs: qcs::cos:region:uid/{AppId}:bucket/object.
+
+    Prefer COS_APPID env; else trailing digits after last hyphen on bucket name
+    (xingze-1520303651 → 1520303651); else default 1520303651.
+    """
+    env = (os.environ.get("COS_APPID") or "").strip()
+    if env:
+        return env
+    if "-" in bucket:
+        tail = bucket.rsplit("-", 1)[-1]
+        if tail.isdigit():
+            return tail
+    return "1520303651"
+
+
+COS_APPID = _derive_cos_appid(COS_BUCKET)
 STS_DURATION = int(os.environ.get("STS_DURATION_SECONDS", "900"))  # 15 min
 SESSION_TTL = int(os.environ.get("SESSION_TTL_SECONDS", "3600"))
 
@@ -135,14 +154,12 @@ def hash_password_cli(password: str, iterations: int = 200_000) -> str:
     return f"{salt.hex()}${iterations}${digest.hex()}"
 
 
-def tencent_credential():
+def cloud_credential():
     """Return a tencentcloud Credential for STS / COS API calls.
 
-    Order:
-      1. TENCENT_SECRET_ID + TENCENT_SECRET_KEY (explicit env, no session token)
-      2. DefaultCredentialProvider (TENCENTCLOUD_SECRET_ID/KEY → profile → CVM/SCF role)
-      3. SCF-injected env variants: TENCENTCLOUD_SECRETID/SECRETKEY/SESSIONTOKEN
-         and SECRET_ID / SECRET_KEY / SESSION_TOKEN
+    Prefer TENCENT_SECRET_ID + TENCENT_SECRET_KEY when both are set.
+    Otherwise use DefaultCredentialProvider (env → profile → CVM/SCF role),
+    then common SCF-injected env name variants.
 
     Returns None if the SDK is missing or no credential is available.
     """
@@ -158,7 +175,7 @@ def tencent_credential():
         return credential.Credential(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
 
     try:
-        cred = credential.DefaultCredentialProvider().get_credential()
+        cred = credential.DefaultCredentialProvider().get_credentials()
         if cred is not None:
             return cred
     except TencentCloudSDKException:
@@ -195,5 +212,5 @@ def tencent_credential():
     return None
 
 
-# Back-compat alias (prefer tencent_credential).
-cloud_credential = tencent_credential
+# Back-compat alias used by earlier patches.
+tencent_credential = cloud_credential

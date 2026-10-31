@@ -1,7 +1,6 @@
 """POST /sts — after session auth → short-lived COS STS via AssumeRole.
 
-Env: CMS_STS_ROLE_ARN, TENCENT_SECRET_ID/KEY (optional), COS_BUCKET, COS_REGION
-Credentials: explicit env secrets, else DefaultCredentialProvider / SCF execution role.
+Env: CMS_STS_ROLE_ARN, TENCENT_SECRET_ID/KEY (or SCF execution role), COS_BUCKET, COS_REGION, COS_APPID (optional; derived from bucket)
 Policy prefixes: data/*.json, images/products|finds|wechat/*
 """
 from __future__ import annotations
@@ -10,13 +9,14 @@ import json
 
 from common import (
     CMS_STS_ROLE_ARN,
+    COS_APPID,
     COS_BUCKET,
     COS_REGION,
     STS_DURATION,
     bearer_token,
+    cloud_credential,
     options_ok,
     response,
-    tencent_credential,
     verify_session_token,
 )
 
@@ -32,13 +32,14 @@ ALLOWED_PREFIXES = [
 
 
 def _resource_arns() -> list[str]:
-    # COS CAM resource format for object prefixes
+    # COS CAM: qcs::cos:{region}:uid/{AppId}:{bucket}/{object}
+    # Never use uid/* — AssumeRole rejects GrantOtherResource.
     arns = []
     for p in ALLOWED_PREFIXES:
         if p.endswith("/"):
-            arns.append(f"qcs::cos:{COS_REGION}:uid/*:{COS_BUCKET}/{p}*")
+            arns.append(f"qcs::cos:{COS_REGION}:uid/{COS_APPID}:{COS_BUCKET}/{p}*")
         else:
-            arns.append(f"qcs::cos:{COS_REGION}:uid/*:{COS_BUCKET}/{p}")
+            arns.append(f"qcs::cos:{COS_REGION}:uid/{COS_APPID}:{COS_BUCKET}/{p}")
     return arns
 
 
@@ -64,7 +65,6 @@ def main_handler(event, context):
             },
         )
 
-    # Live AssumeRole path — role ARN required; creds from env or SCF execution role.
     try:
         from tencentcloud.common.profile.client_profile import ClientProfile
         from tencentcloud.common.profile.http_profile import HttpProfile
@@ -72,14 +72,14 @@ def main_handler(event, context):
     except ImportError:
         return response(500, {"ok": False, "error": "sdk_missing", "hint": "pip install tencentcloud-sdk-python"})
 
-    cred = tencent_credential()
+    cred = cloud_credential()
     if cred is None:
         return response(
-            501,
+            502,
             {
                 "ok": False,
-                "error": "sts_credentials_missing",
-                "hint": "Bind SCF execution role that can sts:AssumeRole on CMS_STS_ROLE_ARN (DefaultCredentialProvider), or set TENCENT_SECRET_ID/KEY in env (prefer role).",
+                "error": "sts_credentials_unavailable",
+                "hint": "Bind SCF execution role that can sts:AssumeRole on CMS_STS_ROLE_ARN, or set TENCENT_SECRET_ID/KEY in env (prefer role).",
             },
         )
 

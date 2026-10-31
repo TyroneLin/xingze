@@ -58,6 +58,17 @@ resource 前缀（COS）：
   images/wechat/*
 ```
 
+**CAM resource ARN 必须带本账号 AppId**（不要 `uid/*`，AssumeRole 会报 `InvalidParameter.GrantOtherResource`）：
+
+```text
+格式：qcs::cos:{region}:uid/{AppId}:{bucket}/{object}
+AppId：1520303651（来自 bucket `xingze-1520303651`）
+
+示例：
+  qcs::cos:ap-hongkong:uid/1520303651:xingze-1520303651/data/products.json
+  qcs::cos:ap-hongkong:uid/1520303651:xingze-1520303651/images/products/*
+```
+
 Action 示例：`cos:PutObject`, `cos:PostObject`, `cos:GetObject`, `cos:HeadObject`, `cos:DeleteObject`（仅上述前缀）。
 
 4. 复制角色 ARN → SCF 环境变量 `CMS_STS_ROLE_ARN`。
@@ -73,6 +84,7 @@ Action 示例：`cos:PutObject`, `cos:PostObject`, `cos:GetObject`, `cos:HeadObj
 | `CMS_STS_ROLE_ARN` | 上一步 ARN |
 | `COS_BUCKET` | `xingze-1520303651` |
 | `COS_REGION` | `ap-hongkong` |
+| `COS_APPID` | 可选；默认从 bucket 尾部推导 `1520303651`。STS 会话策略 ARN 用 `uid/{AppId}`，勿用 `uid/*` |
 | `CORS_ORIGIN` | `https://www.xingzestore.com` |
 | `XZ_GATE` | `1`（软发前保持） |
 | `TENCENT_SECRET_ID` / `KEY` | **尽量不设**；用执行角色。若暂时无角色，仅作过渡 |

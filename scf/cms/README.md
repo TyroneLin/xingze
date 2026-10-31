@@ -29,6 +29,7 @@ Entry: `index.main_handler` (Function URL or API Gateway).
 | `CMS_STS_ROLE_ARN` | `qcs::cam::uin/…:roleName/xingze-cms-sts` |
 | `COS_BUCKET` | `xingze-1520303651` |
 | `COS_REGION` | `ap-hongkong` |
+| `COS_APPID` | optional; derived from bucket suffix (`1520303651`). STS policy ARNs use `uid/{AppId}`, never `uid/*` |
 | `CORS_ORIGIN` | `https://www.xingzestore.com` |
 | `XZ_GATE` | `1` (default) |
 | `TENCENT_SECRET_ID` / `TENCENT_SECRET_KEY` | prefer **SCF execution role** instead |
