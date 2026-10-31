@@ -69,7 +69,7 @@ Routes under `/admin/` (noindex, zh-Hans, jade/ivory):
 
 - sessionStorage token; redirect to login if missing
 - login → POST `/login`; save → STS → browser COS PUT (q-sign sha1 in `js/core.js`, no CDN) → POST `/rebuild`
-- `config.js` keeps `scfBase: 'REPLACE_SCF_BASE'` until Function URL
+- `config.js` `scfBase` → live SCF Function URL (Day-1 stub)
 - MVP: edit existing items only (create/delete stubbed/disabled)
 - Toasts 已保存 / 保存失败; top error banner
 
