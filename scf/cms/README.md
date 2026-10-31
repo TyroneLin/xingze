@@ -42,27 +42,17 @@ python3 -c "from common import hash_password_cli; print(hash_password_cli('YOUR_
 
 ## Pack & deploy (raw zip)
 
-From repo root after `python3 scripts/build.py` is not required for pack — pack **source** templates:
+SCF runtime is **Python 3.9**. `requirements.txt` pins `urllib3<2` + `requests<2.32` so SDK imports do not hit PEP604 (`X | Y`) TypeErrors on 3.9.
+
+Preferred (prunes unused `tencentcloud` products, copies to `xingze-cms-scf.zip` + `dist-artifacts/`):
 
 ```bash
-# from repo root
-rm -rf /tmp/xz-cms-pack && mkdir -p /tmp/xz-cms-pack
-cp scf/cms/*.py scf/cms/requirements.txt /tmp/xz-cms-pack/
-# site templates for rebuild bake
-mkdir -p /tmp/xz-cms-pack/site
-cp -R css js data admin scripts/bake.py /tmp/xz-cms-pack/site/
-mkdir -p /tmp/xz-cms-pack/site/scripts
-mv /tmp/xz-cms-pack/site/bake.py /tmp/xz-cms-pack/site/scripts/bake.py
-# optional: mood/images subset so bake has placeholders
-cp -R images /tmp/xz-cms-pack/site/ 2>/dev/null || true
-# root assets used by bake
-cp favicon.ico favicon-32.png apple-touch-icon.png icon-192.png share.jpg share-wide.jpg robots.txt /tmp/xz-cms-pack/site/ 2>/dev/null || true
-# deps into package (SCF Python)
-pip3 install -r scf/cms/requirements.txt -t /tmp/xz-cms-pack/
-cd /tmp/xz-cms-pack && zip -r /tmp/xingze-cms-scf.zip . -x '*.pyc' -x '*/__pycache__/*'
+# from repo root — uses python3.9 / uv pip when available
+bash scripts/pack_scf_cms.sh
+# then console-upload zip (see CMS-SCF-REUPLOAD.md); do not git-commit the zip
 ```
 
-Console: SCF → region **香港** → create function (Python 3.9+) → upload zip → handler `index.main_handler` → enable **函数URL** (Auth: NONE + rely on admin password) or API Gateway → set env vars → CORS on URL/Gateway for `https://www.xingzestore.com`.
+Console: SCF → region **香港** → function **xingze-cms** (Python **3.9**) → upload zip → handler `index.main_handler` → Function URL Auth NONE → env vars → CORS for `https://www.xingzestore.com` only.
 
 ## Serverless Framework (optional later)
 

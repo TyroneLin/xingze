@@ -1,4 +1,7 @@
-# Tencent SCF (Python 3.9+) — pin lightly; install into package zip for deploy
+# Tencent SCF runtime = Python 3.9 — pin urllib3/requests so imports do not use PEP604 (X | Y)
+# which urllib3 2.x uses and crashes on 3.9 (TypeError: unsupported operand type(s) for |).
 cos-python-sdk-v5>=1.9.30
 tencentcloud-sdk-python>=3.0.1000
+urllib3>=1.26.18,<2.0
+requests>=2.28,<2.32
 # stdlib: hashlib, hmac, json, os, base64, time — no bcrypt binary needed (PBKDF2)
