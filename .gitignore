@@ -6,3 +6,6 @@ __pycache__/
 .env.*
 scf/cms/site/
 /tmp/
+
+# SCF pack output (fat zips also covered by *.zip)
+dist-artifacts/
