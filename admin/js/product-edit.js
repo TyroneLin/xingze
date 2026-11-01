@@ -47,6 +47,8 @@
   }
 
   function renderUpload() {
+    // Keep #file outside #uploadBox — rewriting uploadBox.innerHTML must not destroy the input
+    // or labels for="file" / the DOMContentLoaded change listener stop working.
     var box = document.getElementById("uploadBox");
     var showPath = cleared ? null : (pendingFile ? null : imagePath);
     if (pendingFile) {
@@ -83,7 +85,8 @@
       pendingFile = null;
       cleared = true;
       imagePath = null;
-      document.getElementById("file").value = "";
+      var fileEl = document.getElementById("file");
+      if (fileEl) fileEl.value = "";
       renderUpload();
     };
   }

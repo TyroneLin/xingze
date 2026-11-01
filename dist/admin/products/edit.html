@@ -31,18 +31,18 @@
             <span class="ph-s">image 为 null 时前台显示占位</span>
             <div class="file-row">
               <label class="btn sm" for="file">选择图片</label>
-              <input id="file" type="file" accept="image/*" hidden/>
               <button type="button" class="btn sm ghost" id="clearImg">清除</button>
             </div>
             <div class="progress" id="prog" hidden><span></span></div>
             <p class="tiny" id="progLabel" hidden>上传中…</p>
           </div>
+          <input id="file" type="file" accept="image/*" hidden/>
           <div class="field" style="margin-top:12px;margin-bottom:0">
             <label for="imageAlt">图片说明 imageAlt</label>
             <input class="input" id="imageAlt"/>
           </div>
         </div>
-        <p class="tiny" style="margin-top:8px">路径：<span class="mono">/images/products/…</span></p>
+        <p class="tiny" style="margin-top:8px">路径：<span class="mono">/images/products/…</span> · 选图后点保存才会上传到 COS</p>
       </aside>
 
       <section>
