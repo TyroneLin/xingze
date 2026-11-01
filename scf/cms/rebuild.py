@@ -1,8 +1,11 @@
-"""POST /rebuild — download data(+assets) from COS, bake static HTML, upload to COS.
+"""POST /rebuild — download data from COS, bake static HTML, upload slim dist to COS.
 
 Hard: always bake HTML + titles/meta/og. Never leave public site as client-fetch shells.
 Gate: XZ_GATE default ON (env).
 Credentials: TENCENT_SECRET_ID/KEY or DefaultCredentialProvider / SCF execution role.
+
+MVP speed: prefer packaged site/images; do NOT download/re-upload product/finds/mood
+image trees (browser PUTs already land images on COS; bake only needs JSON path strings).
 """
 from __future__ import annotations
 
@@ -10,6 +13,7 @@ import os
 import shutil
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 from common import (
@@ -25,6 +29,20 @@ from common import (
 DATA_KEYS = ["data/products.json", "data/finds.json", "data/hk-agent.json"]
 # Bake templates + static assets must live in the function package under site/
 SITE_PACKAGE = Path(__file__).resolve().parent / "site"
+
+# Upload allowlist relative to dist/ (skip images/mood, images/products, … every rebuild)
+UPLOAD_DIR_PREFIXES = ("css/", "js/", "admin/", "data/", "products/", "finds/", "hk-agent/", "about/")
+UPLOAD_ROOT_FILES = {
+    "index.html",
+    "404.html",
+    "robots.txt",
+    "favicon.ico",
+    "favicon-32.png",
+    "apple-touch-icon.png",
+    "icon-192.png",
+    "share.jpg",
+    "share-wide.jpg",
+}
 
 
 def _cos_client():
@@ -50,30 +68,34 @@ def _cos_client():
     return CosS3Client(config)
 
 
-def _download_prefix(client, prefix: str, dest: Path):
-    marker = ""
-    while True:
-        resp = client.list_objects(Bucket=COS_BUCKET, Prefix=prefix, Marker=marker, MaxKeys=200)
-        for obj in resp.get("Contents") or []:
-            key = obj["Key"]
-            if key.endswith("/"):
-                continue
-            local = dest / key
-            local.parent.mkdir(parents=True, exist_ok=True)
-            client.download_file(COS_BUCKET, key, str(local))
-        if not resp.get("IsTruncated"):
-            break
-        marker = resp.get("NextMarker") or (resp.get("Contents") or [{}])[-1].get("Key", "")
+def _ms(since: float) -> int:
+    return int((time.monotonic() - since) * 1000)
 
 
-def _upload_tree(client, local_root: Path, key_prefix: str = ""):
+def _should_upload(rel: str) -> bool:
+    """Lean allowlist: baked HTML trees + css/js/admin/data + small root assets.
+    Skip images/** (mood/wechat/products/finds) — already on COS from site deploy / browser PUT.
+    """
+    if "__pycache__" in rel or rel.endswith(".pyc"):
+        return False
+    if rel.startswith("images/") or rel == "images":
+        return False
+    if rel in UPLOAD_ROOT_FILES:
+        return True
+    for prefix in UPLOAD_DIR_PREFIXES:
+        if rel.startswith(prefix):
+            return True
+    return False
+
+
+def _upload_slim(client, local_root: Path) -> int:
+    """Upload allowlisted dist files only. Returns count uploaded."""
+    n = 0
     for path in local_root.rglob("*"):
         if not path.is_file():
             continue
         rel = path.relative_to(local_root).as_posix()
-        key = f"{key_prefix}{rel}" if key_prefix else rel
-        # Skip baking workdirs / pyc
-        if "__pycache__" in rel or rel.endswith(".pyc"):
+        if not _should_upload(rel):
             continue
         ct = None
         if rel.endswith(".html"):
@@ -87,10 +109,12 @@ def _upload_tree(client, local_root: Path, key_prefix: str = ""):
         extra = {"ContentType": ct} if ct else {}
         client.upload_file(
             Bucket=COS_BUCKET,
-            Key=key,
+            Key=rel,
             LocalFilePath=str(path),
             **extra,
         )
+        n += 1
+    return n
 
 
 def main_handler(event, context):
@@ -125,29 +149,39 @@ def main_handler(event, context):
             },
         )
 
+    t_all = time.monotonic()
+    timings: dict[str, int] = {}
     work = Path(tempfile.mkdtemp(prefix="xz-rebuild-"))
     try:
-        # Seed work tree from packaged site templates
+        # Seed work tree from packaged site templates (includes site/images when packed)
+        t = time.monotonic()
         shutil.copytree(SITE_PACKAGE, work, dirs_exist_ok=True)
-        # Overlay live CMS data (+ optional new images) from COS
+        timings["seed_ms"] = _ms(t)
+
+        # Overlay live CMS JSON only — bake embeds image *paths* from JSON; binaries
+        # stay on COS (browser PUT / prior deploy). Skip COS image prefix walks.
+        t = time.monotonic()
         for key in DATA_KEYS:
             dest = work / key
             dest.parent.mkdir(parents=True, exist_ok=True)
             try:
                 client.download_file(COS_BUCKET, key, str(dest))
             except Exception as e:
-                return response(502, {"ok": False, "error": "download_data_failed", "key": key, "detail": str(e)[:200]})
-
-        for prefix in ("images/products/", "images/finds/", "images/wechat/"):
-            try:
-                _download_prefix(client, prefix, work)
-            except Exception:
-                pass  # empty prefixes OK
+                return response(
+                    502,
+                    {
+                        "ok": False,
+                        "error": "download_data_failed",
+                        "key": key,
+                        "detail": str(e)[:200],
+                        "timings": timings,
+                    },
+                )
+        timings["download_data_ms"] = _ms(t)
 
         # Import bake from packaged scripts/
         scripts_dir = work / "scripts"
         if not (scripts_dir / "bake.py").exists():
-            # fallback: copy bake from package sibling
             pkg_scripts = Path(__file__).resolve().parent.parent.parent / "scripts"
             if (pkg_scripts / "bake.py").exists():
                 scripts_dir.mkdir(parents=True, exist_ok=True)
@@ -159,14 +193,16 @@ def main_handler(event, context):
         gate_raw = os.environ.get("XZ_GATE", "1").strip().lower()
         gate = gate_raw not in ("0", "false", "off", "no")
         dist = work / "dist"
-        bake.build(root=work, dist=dist, gate=gate)
 
-        # Upload baked HTML/css/js/admin/data (not necessarily re-upload all mood images)
-        upload_roots = [
-            ("", dist),  # full dist → bucket root
-        ]
-        for _, local in upload_roots:
-            _upload_tree(client, local)
+        t = time.monotonic()
+        bake.build(root=work, dist=dist, gate=gate)
+        timings["bake_ms"] = _ms(t)
+
+        # Slim upload: HTML/css/js/admin/data only — not images/**
+        t = time.monotonic()
+        uploaded = _upload_slim(client, dist)
+        timings["upload_ms"] = _ms(t)
+        timings["total_ms"] = _ms(t_all)
 
         return response(
             200,
@@ -174,10 +210,17 @@ def main_handler(event, context):
                 "ok": True,
                 "gate": gate,
                 "bucket": COS_BUCKET,
-                "message": "rebuild baked and uploaded",
+                "uploaded": uploaded,
+                "slim": True,
+                "message": "rebuild baked and uploaded (slim: no images/ re-upload)",
+                "timings": timings,
             },
         )
     except Exception as e:
-        return response(500, {"ok": False, "error": "rebuild_failed", "detail": str(e)[:400]})
+        timings["total_ms"] = _ms(t_all)
+        return response(
+            500,
+            {"ok": False, "error": "rebuild_failed", "detail": str(e)[:400], "timings": timings},
+        )
     finally:
         shutil.rmtree(work, ignore_errors=True)

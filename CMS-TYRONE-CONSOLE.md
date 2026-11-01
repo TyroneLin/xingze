@@ -18,7 +18,7 @@
    - 运行环境：**Python 3.9**（或 3.10）
    - 提交方法：本地上传 zip（Dev 按 `scf/cms/README.md` 打包）或先建空函数稍后传包
    - 执行方法：`index.main_handler`
-   - 内存：256MB 起；超时：**60–120s**（rebuild bake 需要）
+   - 内存：**512MB**（推荐；bake 需要）；超时：**180s**（最低；若仍吃紧可调 **300s**）。线上 90s 会在 POST /rebuild 报 HTTP 433 Invoking task timed out
 4. **触发器：函数 URL**（推荐 MVP）
    - 开启函数 URL
    - 鉴权：**免鉴权**（靠 admin 密码 + 后续可加 IP/频率限制）

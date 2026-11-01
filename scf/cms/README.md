@@ -8,7 +8,7 @@ Personal Tencent only · bucket `xingze-1520303651` · site `https://www.xingzes
 |------|--------|---------|
 | `POST /login` | `login.py` | PBKDF2 password → session token |
 | `POST /sts` | `sts.py` | session → short STS for data/ + images/ prefixes |
-| `POST /rebuild` | `rebuild.py` | download JSON → **bake HTML** → upload COS |
+| `POST /rebuild` | `rebuild.py` | download JSON → **bake HTML** → slim upload (no `images/` re-upload); needs SCF timeout ≥180s / 512MB |
 | `GET /health` | `index.py` | smoke |
 
 Entry: `index.main_handler` (Function URL or API Gateway).

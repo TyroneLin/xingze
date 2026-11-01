@@ -4,6 +4,8 @@
 
 **不要改：** `ADMIN_PASSWORD_HASH` / 其它环境变量 / Function URL。只换代码包。
 
+**超时/内存：** 函数配置超时请设 **≥180s**（推荐 300s）、内存 **512MB**。当前 90s 会导致 slim 前的 `/rebuild` HTTP **433** timeout；换本 zip 后仍须抬高超时再冒烟。
+
 **STS/rebuild creds:** when `TENCENT_SECRET_ID/KEY` are empty, handlers use `DefaultCredentialProvider` (SCF execution role). Re-pack after `common.py` / `sts.py` / `rebuild.py` credential fixes.
 
 **运行时：** 本 zip 按 **Python 3.9** 打包并 pin `urllib3>=1.26.18,<2.0` + `requests>=2.28,<2.32`。控制台函数运行时须为 **3.9**（或改用未 pin 的 urllib3 2.x 则升到 **3.10+**）。
