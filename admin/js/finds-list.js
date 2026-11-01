@@ -8,9 +8,18 @@
       var cats = fj.categories || {};
       var items = fj.items || [];
       document.getElementById("lead").textContent =
-        items.length + " 条动态 · 多图 + 地点 + 标签";
+        items.length + " 条动态 · 点「编辑」改文案与图片，或「新增结缘」";
       var list = document.getElementById("list");
       list.innerHTML = "";
+      if (!items.length) {
+        var empty = document.createElement("div");
+        empty.className = "empty-cta";
+        empty.innerHTML =
+          "<p class=\"tiny\">还没有结缘动态</p>" +
+          "<a class=\"btn sm\" href=\"edit.html?new=1\">新增结缘</a>";
+        list.appendChild(empty);
+        return;
+      }
       items.forEach(function (it) {
         var a = document.createElement("a");
         a.className = "list-item";
