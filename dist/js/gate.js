@@ -1,6 +1,6 @@
 /* 星泽 temporary preview gate — client-side only; reversible via XZ_GATE=0 rebuild */
 (function () {
-  var EXPECT = "7025d284c4c69ce25324f2a7e213ba537ec7ed810b44aff2b051afcdcf692d46";
+  var EXPECT = "700677ad41fc5fa706287181810864377830b145a8a573b91d42b41eb2df79ba";
   var KEY = "xz_gate_ok";
   var TOKEN = EXPECT;
 

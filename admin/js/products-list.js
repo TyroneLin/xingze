@@ -16,7 +16,12 @@
     });
     list.innerHTML = "";
     if (!rows.length) {
-      list.innerHTML = "<p class=\"tiny\">没有匹配项</p>";
+      var empty = document.createElement("div");
+      empty.className = "empty-cta";
+      empty.innerHTML =
+        "<p class=\"tiny\">没有匹配项</p>" +
+        "<a class=\"btn sm\" href=\"edit.html?new=1\">新增产品</a>";
+      list.appendChild(empty);
       return;
     }
     rows.forEach(function (it) {
@@ -46,7 +51,7 @@
       state.items = pj.items || [];
       state.cats = pj.categories || {};
       document.getElementById("lead").textContent =
-        state.items.length + " 件藏品 · 点「编辑」改文案与主图";
+        state.items.length + " 件藏品 · 点「编辑」改文案与主图，或「新增产品」";
       render();
     }).catch(function (e) {
       document.getElementById("lead").textContent = String(e.message || e);
