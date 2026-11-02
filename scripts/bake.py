@@ -162,7 +162,10 @@ def head(key: str, pre: str, override: dict | None = None) -> str:
     fav = f"{pre}favicon.ico"
     fav32 = f"{pre}favicon-32.png"
     touch = f"{pre}apple-touch-icon.png"
-    share = f"{pre}share-wide.jpg"  # 1200×630 og image (temporary)
+    # Canonical host locked with SEO: www (apex should 301 → www).
+    site = "https://www.xingzestore.com"
+    page_url = f'{site}{s["path"]}'
+    share = f"{site}/share-wide.jpg"
     css = f"{pre}css/style.css"
     meta_desc = ""
     if s["desc"]:
@@ -185,14 +188,12 @@ def head(key: str, pre: str, override: dict | None = None) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">{gate_early}
-  <!-- TODO(deploy): set hreflang + og:url to the live COS / custom-domain absolute URL (e.g. https://www.example.com{s["path"]}). Leave empty until then. -->
-  <link rel="alternate" hreflang="zh-Hans" href="">
-  <!-- zh-Hant TBD · SEO copy temporary until Specialist revises -->
+  <link rel="canonical" href="{page_url}">
+  <link rel="alternate" hreflang="zh-Hans" href="{page_url}">
+  <!-- zh-Hant TBD after content inventory -->
   <title>{E(s["title"])}</title>{meta_desc}
   <meta property="og:type" content="website">
-  <!-- TODO(deploy): og:url absolute live URL -->
-  <meta property="og:url" content="">
-  <!-- TODO(deploy): Moments / WeChat share needs ABSOLUTE og:image https://<domain>/share-wide.jpg once COS/custom domain is live — do not invent a fake host. -->
+  <meta property="og:url" content="{page_url}">
   <meta property="og:image" content="{share}">
   <link rel="icon" href="{fav}" type="image/x-icon">
   <link rel="icon" href="{fav32}" type="image/png" sizes="32x32">

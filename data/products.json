@@ -1,178 +1,189 @@
 {
- "_note": "CMS-editable. origin* = 产地名待 Leanne 确认 (swap here). image null => 「待 Leanne 素材」 placeholder; real images go under /images/products/.",
- "origins": {
-  "o1": "新会核心产区",
-  "o2": "梅江",
-  "o3": "港区仓储"
- },
- "categories": {
-  "all": "全部藏品",
-  "crystal": "水晶矿石",
-  "wenwan": "东方文玩",
-  "wellness": "养生香道"
- },
- "items": [
-  {
-   "id": "XZ-C01",
-   "category": "crystal",
-   "title": "极光23原矿手串",
-   "spec": "天然矿标 · 13mm 单圈",
-   "tags": [
-    "老矿孤品",
-    "极品聚宝盆"
-   ],
-   "desc": "亿万年沉积多矿物共生，晶体通透，能量场温润。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
+  "_note": "CMS-editable. origin* = 产地名待 Leanne 确认 (swap here). image null => 「待 Leanne 素材」 placeholder; real images go under /images/products/.",
+  "origins": {
+    "o1": "新会核心产区",
+    "o2": "梅江",
+    "o3": "港区仓储"
   },
-  {
-   "id": "XZ-W02",
-   "category": "wenwan",
-   "title": "满肉南红精工雕件",
-   "spec": "老料 · 把件",
-   "tags": [
-    "苏工精雕",
-    "满肉柿子红"
-   ],
-   "desc": "无杂无裂满色，手工开脸，随身佩玩温润，岁月包浆可期。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
+  "categories": {
+    "all": "全部藏品",
+    "crystal": "水晶矿石",
+    "wenwan": "东方文玩",
+    "wellness": "养生香道"
   },
-  {
-   "id": "XZ-C03",
-   "category": "crystal",
-   "title": "巴西绿幽灵聚宝盆",
-   "spec": "高冰体底 · 11.5mm",
-   "tags": [
-    "巴西原矿",
-    "千层翠绿"
-   ],
-   "desc": "半盆聚宝景观，晶体如冰纯净，寓意步步青云。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-Y04",
-   "category": "wellness",
-   "title": "纯手工沉香线香",
-   "spec": "文人雅集 · 20g 装",
-   "tags": [
-    "古法手作"
-   ],
-   "desc": "天然楠木皮黏，甘甜清雅，焚一炷涤荡浮躁思虑。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-W05",
-   "category": "wenwan",
-   "title": "老料鸡油黄蜜蜡单圈",
-   "spec": "自然风化 · 16mm 单圈",
-   "tags": [
-    "满蜜纯蜡"
-   ],
-   "desc": "浓郁鸡油黄，流淌纹理清晰，质感温润如脂。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-W06",
-   "category": "wenwan",
-   "title": "天然和田玉籽料把件",
-   "spec": "白玉原籽 · 48g",
-   "tags": [
-    "洒金皮籽料"
-   ],
-   "desc": "玉质细密油脂度高，原皮原籽，握于手心凝练温润。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-Y07",
-   "category": "wellness",
-   "title": "港区调配古树陈皮",
-   "spec": "{o3} · {o2}大红柑",
-   "tags": [
-    "{o1}",
-    "十五年干仓"
-   ],
-   "desc": "传统干仓自然陈化，油室饱满，煮水香气纯正回甘。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-C08",
-   "category": "crystal",
-   "title": "顶级顺发铜发晶手串",
-   "spec": "高顺发满丝 · 12mm",
-   "tags": [
-    "发晶之王",
-    "猫眼效应"
-   ],
-   "desc": "铜红色矿丝顺直同向，光下转动呈现猫眼光带。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-C09",
-   "category": "crystal",
-   "title": "高冰蓝月光石手串",
-   "spec": "玻璃体全净 · 9.5mm",
-   "tags": [
-    "强蓝光晕"
-   ],
-   "desc": "清透如水滴，微光拂过泛起清冷蓝晕，内省之石。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-W10",
-   "category": "wenwan",
-   "title": "百年古树文玩狮子头",
-   "spec": "野生原树 · 43边",
-   "tags": [
-    "原生态皮壳",
-    "老桩闷尖"
-   ],
-   "desc": "配对度高，纹理深大骨质坚实，盘玩声音清越。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-C11",
-   "category": "crystal",
-   "title": "超七金草莓云母手串",
-   "spec": "全满片闪 · 10mm",
-   "tags": [
-    "七彩火彩"
-   ],
-   "desc": "细密云母片在日光下转动如星河流转，华美内敛。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  },
-  {
-   "id": "XZ-Y12",
-   "category": "wellness",
-   "title": "檀香艾草舒缓抚慰油",
-   "spec": "私享手调 · 30ml 滴管",
-   "tags": [
-    "天然植物萃取"
-   ],
-   "desc": "老山檀香搭配陈艾，适合日常肩颈抚触与静心安神。",
-   "image": null,
-   "imageAlt": "待 Leanne 素材",
-   "cta": "私信结缘"
-  }
- ]
+  "items": [
+    {
+      "id": "XZ-C01",
+      "category": "crystal",
+      "title": "极光23原矿手串",
+      "spec": "天然矿标 · 13mm 单圈",
+      "tags": [
+        "老矿孤品",
+        "极品聚宝盆"
+      ],
+      "desc": "亿万年沉积多矿物共生，晶体通透，能量场温润。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-W02",
+      "category": "wenwan",
+      "title": "满肉南红精工雕件",
+      "spec": "老料 · 把件",
+      "tags": [
+        "苏工精雕",
+        "满肉柿子红"
+      ],
+      "desc": "无杂无裂满色，手工开脸，随身佩玩温润，岁月包浆可期。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-C03",
+      "category": "crystal",
+      "title": "巴西绿幽灵聚宝盆",
+      "spec": "高冰体底 · 11.5mm",
+      "tags": [
+        "巴西原矿",
+        "千层翠绿"
+      ],
+      "desc": "半盆聚宝景观，晶体如冰纯净，寓意步步青云。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-Y04",
+      "category": "wellness",
+      "title": "纯手工沉香线香",
+      "spec": "文人雅集 · 20g 装",
+      "tags": [
+        "古法手作"
+      ],
+      "desc": "天然楠木皮黏，甘甜清雅，焚一炷涤荡浮躁思虑。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-W05",
+      "category": "wenwan",
+      "title": "老料鸡油黄蜜蜡单圈",
+      "spec": "自然风化 · 16mm 单圈",
+      "tags": [
+        "满蜜纯蜡"
+      ],
+      "desc": "浓郁鸡油黄，流淌纹理清晰，质感温润如脂。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-W06",
+      "category": "wenwan",
+      "title": "天然和田玉籽料把件",
+      "spec": "白玉原籽 · 48g",
+      "tags": [
+        "洒金皮籽料"
+      ],
+      "desc": "玉质细密油脂度高，原皮原籽，握于手心凝练温润。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-Y07",
+      "category": "wellness",
+      "title": "港区调配古树陈皮",
+      "spec": "{o3} · {o2}大红柑",
+      "tags": [
+        "{o1}",
+        "十五年干仓"
+      ],
+      "desc": "传统干仓自然陈化，油室饱满，煮水香气纯正回甘。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-C08",
+      "category": "crystal",
+      "title": "顶级顺发铜发晶手串",
+      "spec": "高顺发满丝 · 12mm",
+      "tags": [
+        "发晶之王",
+        "猫眼效应"
+      ],
+      "desc": "铜红色矿丝顺直同向，光下转动呈现猫眼光带。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-C09",
+      "category": "crystal",
+      "title": "高冰蓝月光石手串",
+      "spec": "玻璃体全净 · 9.5mm",
+      "tags": [
+        "强蓝光晕"
+      ],
+      "desc": "清透如水滴，微光拂过泛起清冷蓝晕，内省之石。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-W10",
+      "category": "wenwan",
+      "title": "百年古树文玩狮子头",
+      "spec": "野生原树 · 43边",
+      "tags": [
+        "原生态皮壳",
+        "老桩闷尖"
+      ],
+      "desc": "配对度高，纹理深大骨质坚实，盘玩声音清越。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-C11",
+      "category": "crystal",
+      "title": "超七金草莓云母手串",
+      "spec": "全满片闪 · 10mm",
+      "tags": [
+        "七彩火彩"
+      ],
+      "desc": "细密云母片在日光下转动如星河流转，华美内敛。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-Y12",
+      "category": "wellness",
+      "title": "檀香艾草舒缓抚慰油",
+      "spec": "私享手调 · 30ml 滴管",
+      "tags": [
+        "天然植物萃取"
+      ],
+      "desc": "老山檀香搭配陈艾，适合日常肩颈抚触与静心安神。",
+      "image": null,
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    },
+    {
+      "id": "XZ-C12",
+      "category": "crystal",
+      "title": "冒烟测试新品",
+      "spec": "",
+      "tags": [],
+      "desc": "",
+      "image": "/images/products/XZ-C12-1793524413922.jpg",
+      "imageAlt": "待 Leanne 素材",
+      "cta": "私信结缘"
+    }
+  ]
 }

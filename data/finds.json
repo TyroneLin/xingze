@@ -1,115 +1,131 @@
 {
- "_note": "CMS-editable. images[].src null => 「待 Leanne 素材」 placeholder; real images under /images/finds/.",
- "categories": {
-  "all": "全部动态",
-  "crystal": "#晶石鉴赏",
-  "wenwan": "#文玩盘养",
-  "hk": "#港澳采买",
-  "tea": "#香道茶事",
-  "mood": "#结缘心境"
- },
- "items": [
-  {
-   "id": "F01",
-   "category": "crystal",
-   "time": "2小时前",
-   "location": "深圳 · 精选工坊（地点待 Leanne 确认）",
-   "text": "阴天午后试光。这批老矿极光23层叠的钛晶与红紫胶花太生动了，不加任何打光，只靠窗台漫射的自然天光，内部矿层便层峦叠嶂。",
-   "tags": [
-    "#主理人日常",
-    "#极光23",
-    "#一物一相"
-   ],
-   "images": [
+  "_note": "CMS-editable. images[].src null => 「待 Leanne 素材」 placeholder; real images under /images/finds/.",
+  "categories": {
+    "all": "全部动态",
+    "crystal": "#晶石鉴赏",
+    "wenwan": "#文玩盘养",
+    "hk": "#港澳采买",
+    "tea": "#香道茶事",
+    "mood": "#结缘心境"
+  },
+  "items": [
     {
-     "src": null,
-     "alt": "自然光矿构细节 · 微距"
+      "id": "F01",
+      "category": "crystal",
+      "time": "2小时前",
+      "location": "深圳 · 精选工坊（地点待 Leanne 确认）",
+      "text": "阴天午后试光。这批老矿极光23层叠的钛晶与红紫胶花太生动了，不加任何打光，只靠窗台漫射的自然天光，内部矿层便层峦叠嶂。",
+      "tags": [
+        "#主理人日常",
+        "#极光23",
+        "#一物一相"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": "自然光矿构细节 · 微距"
+        },
+        {
+          "src": null,
+          "alt": "上手试戴质感 · 12mm 实佩"
+        }
+      ]
     },
     {
-     "src": null,
-     "alt": "上手试戴质感 · 12mm 实佩"
-    }
-   ]
-  },
-  {
-   "id": "F02",
-   "category": "hk",
-   "time": "昨天 18:30",
-   "location": "地点待 Leanne 确认",
-   "text": "今天在香港帮几位老客人采买限定香氛与银饰手作。每次来港都坚持亲自核验成色、比对小票盖印，在柜台前当面封盒。",
-   "tags": [
-    "#港澳专柜采买",
-    "#深港往返"
-   ],
-   "images": [
-    {
-     "src": null,
-     "alt": "专柜当面验单封盒过程实拍"
-    }
-   ]
-  },
-  {
-   "id": "F03",
-   "category": "wenwan",
-   "time": "3天前",
-   "location": "地点待 Leanne 确认",
-   "text": "很多朋友问南红把件如何盘出温润熟化感。切忌用厚油去闷，最宜净手微盘，数月后自然返出糯红光晕。",
-   "tags": [
-    "#文玩盘养",
-    "#南红玛瑙"
-   ],
-   "images": [
-    {
-     "src": null,
-     "alt": "苏工手作细节"
+      "id": "F02",
+      "category": "hk",
+      "time": "昨天 18:30",
+      "location": "地点待 Leanne 确认",
+      "text": "今天在香港帮几位老客人采买限定香氛与银饰手作。每次来港都坚持亲自核验成色、比对小票盖印，在柜台前当面封盒。",
+      "tags": [
+        "#港澳专柜采买",
+        "#深港往返"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": "专柜当面验单封盒过程实拍"
+        }
+      ]
     },
     {
-     "src": null,
-     "alt": "盘养微包浆对光"
+      "id": "F03",
+      "category": "wenwan",
+      "time": "3天前",
+      "location": "地点待 Leanne 确认",
+      "text": "很多朋友问南红把件如何盘出温润熟化感。切忌用厚油去闷，最宜净手微盘，数月后自然返出糯红光晕。",
+      "tags": [
+        "#文玩盘养",
+        "#南红玛瑙"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": "苏工手作细节"
+        },
+        {
+          "src": null,
+          "alt": "盘养微包浆对光"
+        },
+        {
+          "src": null,
+          "alt": "原料原相"
+        }
+      ]
     },
     {
-     "src": null,
-     "alt": "原料原相"
-    }
-   ]
-  },
-  {
-   "id": "F04",
-   "category": "tea",
-   "time": "4天前",
-   "location": "深圳 · 静心茶室（地点待 Leanne 确认）",
-   "text": "晨间点一支老料线香，配一泡岩茶。忙碌于两城之间，唯有回到茶席前，心神方能重新沉淀。",
-   "tags": [
-    "#茶空间香道",
-    "#晨间静坐"
-   ],
-   "images": [
-    {
-     "src": null,
-     "alt": "晨光香烟与茶席细节实拍"
-    }
-   ]
-  },
-  {
-   "id": "F05",
-   "category": "mood",
-   "time": "5天前",
-   "location": "深圳 · 工坊结缘纪事",
-   "text": "收到老朋友发来的佩戴返图。去年结缘的青花籽料，经日日抚摩愈发莹润。人养玉三年，玉护人一生。",
-   "tags": [
-    "#结缘返图",
-    "#心境分享"
-   ],
-   "images": [
-    {
-     "src": null,
-     "alt": "老友日常佩戴返图"
+      "id": "F04",
+      "category": "tea",
+      "time": "4天前",
+      "location": "深圳 · 静心茶室（地点待 Leanne 确认）",
+      "text": "晨间点一支老料线香，配一泡岩茶。忙碌于两城之间，唯有回到茶席前，心神方能重新沉淀。",
+      "tags": [
+        "#茶空间香道",
+        "#晨间静坐"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": "晨光香烟与茶席细节实拍"
+        }
+      ]
     },
     {
-     "src": null,
-     "alt": "出盒前籽料细节"
+      "id": "F05",
+      "category": "mood",
+      "time": "5天前",
+      "location": "深圳 · 工坊结缘纪事",
+      "text": "收到老朋友发来的佩戴返图。去年结缘的青花籽料，经日日抚摩愈发莹润。人养玉三年，玉护人一生。",
+      "tags": [
+        "#结缘返图",
+        "#心境分享"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": "老友日常佩戴返图"
+        },
+        {
+          "src": null,
+          "alt": "出盒前籽料细节"
+        }
+      ]
+    },
+    {
+      "id": "F06",
+      "category": "mood",
+      "time": "冒烟刚刚",
+      "location": "冒烟地点",
+      "text": "冒烟测试新增结缘 F06 — 请勿当真",
+      "tags": [
+        "#冒烟"
+      ],
+      "images": [
+        {
+          "src": null,
+          "alt": ""
+        }
+      ]
     }
-   ]
-  }
- ]
+  ]
 }
